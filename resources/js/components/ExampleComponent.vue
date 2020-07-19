@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  name:"ExampleComponent",
+  name:"Menu-component",
   data () {
     return {
       tab: null,
