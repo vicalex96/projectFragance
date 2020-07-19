@@ -38,6 +38,7 @@
           </v-card>
         </v-tab-item>
       </v-tabs-items>
+      <div>hola</div>
     </v-card>
     </v-card>
 
