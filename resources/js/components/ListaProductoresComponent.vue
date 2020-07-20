@@ -13,8 +13,7 @@
             <v-list-item-title v-text="vam_productor.nombre"></v-list-item-title>
             <v-list-item-title v-text="vam_productor.correo"></v-list-item-title>
             <v-list-item-title v-text="vam_productor.pagina"></v-list-item-title>
-            <v-btn small>Button</v-btn>
-            <v-btn small>Button</v-btn>
+            <v-btn color="blue" small>Evaluacion</v-btn>
           </v-list-item-content>
  
                 
