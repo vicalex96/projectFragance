@@ -3,6 +3,7 @@
 <v-app id="inspire">
    
    <listaproductores-component/>
-   
+
+
 </v-app>
 @endsection
