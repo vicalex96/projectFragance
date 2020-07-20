@@ -17,9 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('/productores', 'ProductorController')->middleware('auth');
+Route::resource('/productores', 'ProductorController');
 
