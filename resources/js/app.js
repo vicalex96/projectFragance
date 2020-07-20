@@ -14,6 +14,7 @@ Vue.component('listaproductores-component', require('./components/ListaProductor
 
 Vue.component('recomendador-component', require('./components/Recomendador.vue').default);
 
+Vue.component('barradetareas-component', require('./components/BarradeTareasComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

@@ -1,9 +1,8 @@
 @extends('layouts.app')
 @section('content')
 <v-app id="inspire">
+   <barradetareas-component/>
    
-   <listaproductores-component/>
-
 
 </v-app>
 @endsection
