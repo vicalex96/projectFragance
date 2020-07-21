@@ -20,6 +20,7 @@
         <v-tab color="blue lighten-2"
           v-for="item in items"
           :key="item"
+          @click="redireccionar(item)"
         >
            <p class=" white--text">{{ item }} </p>
           
@@ -30,6 +31,7 @@
         <v-tab-item
           v-for="item in items"
           :key="item"
+          
         >
           <v-card
             color="cyan"
@@ -38,7 +40,6 @@
           </v-card>
         </v-tab-item>
       </v-tabs-items>
-      <div>hola</div>
     </v-card>
     </v-card>
 
@@ -51,8 +52,19 @@ export default {
     return {
       tab: null,
       items: [
-        'inicio', 'Recomendador', 'proveedor', 'productor',
+        'inicio', 'Recomendador', 'evaluaciones', 'contratos','pedidos',
       ],
+    }
+  },
+  methods:{
+    redireccionar(item){
+      if(item=='inicio') window.location.href = '/'
+      if(item=='Recomendador') window.location.href = '/recomendador'
+      if(item=='evaluaciones') window.location.href = '/evaluaciones'
+      if(item=='contratos') window.location.href = '/contratos'
+      if(item=='pedidos') window.location.href = '/pedidos'
+    
+      
     }
   },
 }

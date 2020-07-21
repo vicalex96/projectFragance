@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <v-app id="inspire">
-   <example-component></example-component>
-   <recomendador-component></recomendador-component>
+   <header-component></header-component>
+   <maestoeval-component></maestoeval-component>
 </v-app>
 @endsection

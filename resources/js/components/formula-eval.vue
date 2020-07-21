@@ -1,9 +1,9 @@
 <template>
-    <v-form>
+      <v-form>
     <v-container>
         <v-row>
-          <v-col class="blue lighten-2 white--text text-center display-2 pa-3" cols="12">
-                  creador de evaluaciones
+          <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="12">
+                  creador de formulas de evaluaciones
           </v-col>
         </v-row>
         <v-row>
@@ -35,7 +35,7 @@
                 +
              </v-btn>
          </v-col>
-          <v-col class="blue lighten-4 white--text text-right pa-3" cols="8">
+          <v-col class="blue lighten-4 white--text text-right pa-3" cols="8"></v-col>
        </v-row>
         <v-row v-for="criterio in criterios" :key="criterio.nro" >
           <v-col class="blue darken-2 white--text text-right pa-7" cols="2">
@@ -124,7 +124,6 @@
         </v-row>
         <v-row>
           <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
-                  criterios
           </v-col>
           <v-col class="blue lighten-4" cols="10" >
               <v-btn
@@ -143,86 +142,7 @@
 
 <script>
 export default {
-  data: vm => ({
-    criterios:[{
-      nro: 0,
-      id: 0,
-      descripcion:'',
-      peso: '',
-      select: null,
-    },
-    {
-      nro: 1,
-      id: 1,
-      descripcion:'',
-      peso: 0,
-    }],
-
-    valid: true,
-    pesoExito:'',
-    reglasDePeso: [
-      v => !!v || 'el peso es requerido', 
-      v => (v && parseInt(v)<=100) || 'el peso supera el 100% o es texto',
-    ],
-    select: null,
-    items: [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ],
-    fecha: new Date().toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-    menu1: false,
-    disabled:true,
-  }),
-  
-  computed: {
-    computedDateFormatted () {
-      return this.formatDate(this.fecha)
-    },
-  },
-
-  watch: {
-    fecha (val) {
-      this.dateFormatted = this.formatDate(this.fecha)
-    },
-  },
-
-  methods: {
-    validate () {
-      this.$refs.form.validate()
-    },
-    reset () {
-      this.$refs.form.reset()
-    },
-    resetValidation () {
-      this.$refs.form.resetValidation()
-    },
-    agregarCriterio(){
-      criterio = {
-      nro: this.criterios.length,
-      id: this.criterios.length,
-      descripcion:'',
-      peso: 0,
-      }
-      this.criterios.push(criterio)
-    },
-    eliminarCriterio(index){
-      this.criterios.splice(index,1)
-      contador = 0
-      for(e in this.criterios){
-        this.criterios[contador].nro = contador
-        contador++    
-      }
-      
-    },
-    formatDate (fecha) {
-      if (!fecha) return null
-
-      const [anio, mes, dia] = fecha.split('-')
-      return `${dia}-${mes}-${anio}`
-    },
-  },
+    data:() =>({
+    }),
 }
 </script>
