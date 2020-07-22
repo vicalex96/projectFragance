@@ -28,7 +28,10 @@ Route::get('/pedidos', function () {
 
 
 
-
+Route::get('/proveedores/inicial','evaluacionController@obtenerListadoInicial');
+Route::get('/proveedores/renovacion','evaluacionController@obtenerListadoRenovacion');
 
 Route::apiResource('productores','productorController');
 Route::apiResource('proveedores','proveedorController');
+
+

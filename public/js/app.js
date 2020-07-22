@@ -2232,6 +2232,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2273,19 +2275,92 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['productor'],
   data: function data() {
     return {
-      tipoEval: "inicial"
+      tipoEval: null,
+      empresaProveedora: '',
+      dialog: false,
+      proveedores: [],
+      contenido: 'vacio',
+      paises: null
     };
   },
   methods: {
-    elegirTipoEval: function elegirTipoEval() {
-      if (tipoEval == "inicial") {
-        tipoEval == "renovacion";
-      } else {
-        tipoEval == "inicial";
+    cargarPaises: function cargarPaises(Paises) {},
+    cargarLista: function cargarLista(tipoEval) {
+      var _this = this;
+
+      this.empresaProveedora = '';
+
+      if (tipoEval == 'inicial' && this.contenido != 'inicial') {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/proveedores/".concat(this.productor.id_productor)).then(function (response) {
+          _this.proveedores = response.data;
+        });
+      }
+
+      if (tipoEval == 'renovacion' && this.contenido != 'renovacion') {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/proveedores/renovacion", this.productor).then(function (response) {
+          _this.proveedores = response.data;
+        });
       }
     }
   }
@@ -4852,14 +4927,31 @@ var render = function() {
             "v-col",
             {
               staticClass: "blue lighten-2 white--text text-right ",
-              attrs: { cols: "12" }
+              attrs: { cols: "6" }
             },
             [
-              _vm._v(
-                "\n            productor: -- " +
-                  _vm._s(_vm.productor.nombre) +
-                  " --\n        "
-              )
+              _c("p", [
+                _vm._v("productor: -- " + _vm._s(_vm.productor.nombre) + " -- ")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            {
+              staticClass: "blue lighten-2 white--text text-right ",
+              attrs: { cols: "6" }
+            },
+            [
+              _vm.empresaProveedora
+                ? _c("p", [
+                    _vm._v(
+                      "proveedor: -- " +
+                        _vm._s(_vm.empresaProveedora.nombre) +
+                        " --"
+                    )
+                  ])
+                : _vm._e()
             ]
           )
         ],
@@ -4878,9 +4970,7 @@ var render = function() {
             [_vm._v("\n            tipo de evaluacion   \n        ")]
           ),
           _vm._v(" "),
-          _c("v-col", { staticClass: "blue lighten-5", attrs: { cols: "1" } }, [
-            _vm._v(" " + _vm._s(_vm.tipoEval) + " ")
-          ]),
+          _c("v-col", { staticClass: "blue lighten-5", attrs: { cols: "1" } }),
           _vm._v(" "),
           _c(
             "v-col",
@@ -4889,8 +4979,19 @@ var render = function() {
               _c(
                 "v-radio-group",
                 {
-                  attrs: { "v-model": _vm.tipoEval, mandatory: true, row: "" },
-                  on: { change: _vm.elegirTipoEval }
+                  attrs: { row: "" },
+                  on: {
+                    change: function($event) {
+                      return _vm.cargarLista(_vm.tipoEval)
+                    }
+                  },
+                  model: {
+                    value: _vm.tipoEval,
+                    callback: function($$v) {
+                      _vm.tipoEval = $$v
+                    },
+                    expression: "tipoEval"
+                  }
                 },
                 [
                   _c("v-radio", {
@@ -4919,6 +5020,135 @@ var render = function() {
               staticClass: "blue darken-2 white--text text-right pa-5",
               attrs: { cols: "3" }
             },
+            [_vm._v("\n              pais\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { staticClass: "blue lighten-5", attrs: { cols: "9" } },
+            [
+              _c(
+                "v-dialog",
+                {
+                  attrs: { scrollable: "", "max-width": "300px" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                { attrs: { color: "warning", dark: "" } },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n                    seleccionar lugar envio\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.dialog,
+                    callback: function($$v) {
+                      _vm.dialog = $$v
+                    },
+                    expression: "dialog"
+                  }
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [_vm._v("elegir pais")]),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        { staticStyle: { height: "400px" } },
+                        _vm._l(_vm.proveedores, function(proveedor) {
+                          return _c(
+                            "v-radio-group",
+                            {
+                              key: proveedor.id_proveedor,
+                              attrs: { column: "" },
+                              model: {
+                                value: _vm.empresaProveedora,
+                                callback: function($$v) {
+                                  _vm.empresaProveedora = $$v
+                                },
+                                expression: "empresaProveedora"
+                              }
+                            },
+                            [
+                              _c("v-radio", {
+                                attrs: {
+                                  label: proveedor.nombre,
+                                  value: proveedor
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.dialog = false
+                                }
+                              }
+                            },
+                            [_vm._v("aceptar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        [
+          _c(
+            "v-col",
+            {
+              staticClass: "blue darken-2 white--text text-right pa-5",
+              attrs: { cols: "3" }
+            },
             [_vm._v("\n              proveedores\n        ")]
           ),
           _vm._v(" "),
@@ -4927,13 +5157,118 @@ var render = function() {
             { staticClass: "blue lighten-5", attrs: { cols: "9" } },
             [
               _c(
-                "v-btn",
+                "v-dialog",
                 {
-                  staticClass: "mr-4",
-                  attrs: { color: "warning" },
-                  on: { click: _vm.mostrarListado }
+                  attrs: { scrollable: "", "max-width": "300px" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        var attrs = ref.attrs
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              _vm._b(
+                                {
+                                  attrs: {
+                                    disabled:
+                                      _vm.paises == null &&
+                                      _vm.tipoEval == null,
+                                    color: "primary",
+                                    dark: ""
+                                  }
+                                },
+                                "v-btn",
+                                attrs,
+                                false
+                              ),
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n                    listado de proveedores\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.dialog,
+                    callback: function($$v) {
+                      _vm.dialog = $$v
+                    },
+                    expression: "dialog"
+                  }
                 },
-                [_vm._v("\n            crear escala\n            ")]
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [_vm._v("elegir proveedor")]),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        { staticStyle: { height: "400px" } },
+                        _vm._l(_vm.proveedores, function(proveedor) {
+                          return _c(
+                            "v-radio-group",
+                            {
+                              key: proveedor.id_proveedor,
+                              attrs: { column: "" },
+                              model: {
+                                value: _vm.empresaProveedora,
+                                callback: function($$v) {
+                                  _vm.empresaProveedora = $$v
+                                },
+                                expression: "empresaProveedora"
+                              }
+                            },
+                            [
+                              _c("v-radio", {
+                                attrs: {
+                                  label: proveedor.nombre,
+                                  value: proveedor
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.dialog = false
+                                }
+                              }
+                            },
+                            [_vm._v("aceptar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
               )
             ],
             1
