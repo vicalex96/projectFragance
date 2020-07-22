@@ -22,10 +22,11 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    <v-app id="app">
+        <header-component></header-component>
         <main>
             @yield('content')
         </main>
-    </div>
+    </v-app>
 </body>
 </html>

@@ -1,16 +1,6 @@
 <template>
 <v-component>
-    <opciones-formula-component
-    v-show="productor.length != 0 &&  opcion == 'menu'"
-    :productor="productor" @opcionFormula = "elegirOpcion(...arguments)"
-    > </opciones-formula-component>
-
-    <escala-component
-    v-show="opcion == 'escala'"
-    ></escala-component>
-    <formula-component
-    v-show="opcion == 'formula'"
-    ></formula-component>
+    
 
     <selector-component
     v-show="productor.length == 0"
@@ -64,3 +54,4 @@ import axios from 'axios'
 
  }
 </script>
+

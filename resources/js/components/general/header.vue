@@ -50,7 +50,7 @@ export default {
   name:"ExampleComponent",
   data () {
     return {
-      tab: null,
+      tab:null,
       items: [
         'inicio', 'Recomendador', 'evaluaciones', 'contratos','pedidos',
       ],
@@ -58,7 +58,7 @@ export default {
   },
   methods:{
     redireccionar(item){
-      if(item=='inicio') window.location.href = '/'
+      if(item=='inicio') window.location.href = '/inicio'
       if(item=='Recomendador') window.location.href = '/recomendador'
       if(item=='evaluaciones') window.location.href = '/evaluaciones'
       if(item=='contratos') window.location.href = '/contratos'
@@ -66,6 +66,9 @@ export default {
     
       
     }
+  },
+  mounted(){
+
   },
 }
 </script>

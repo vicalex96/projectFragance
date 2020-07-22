@@ -2,14 +2,14 @@
    <v-form v-model="valid">
      <v-container class=" offset-2">
         <v-row>
-          <v-col class="blue lighten-2 white--text text-center display-2 pa-3" cols="8">
+          <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="8">
                   creador escala
           </v-col>
         </v-row>
        <v-row>
           <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                   fecha de vencimiento
-                  <p>(opciona)</p>
+                  <p>(opcional)</p>
           </v-col>
           <v-col class="blue lighten-5" cols="4" >
               <v-menu
@@ -117,7 +117,3 @@ export default {
     },
 }
 </script>
-
-<style>
-
-</style>

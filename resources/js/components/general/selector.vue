@@ -5,11 +5,11 @@
           {{tipo}}
         </v-col>
     </v-row>
-    <v-row v-for="element in lista" :key="element[0]">
+    <v-row v-for="(element) in lista" :key="element[0]">
         <v-col class="blue lighten-5" cols="1" >
             <v-list-item-avatar >
                 <v-avatar
-                color="#2196F3"
+                :color="colors[0]"
                 size="56"
                 class="white--text"
                 >
@@ -59,24 +59,6 @@ export default {
         names: ['Oliver', 'Jake', 'Noah', 'James', 'Jack', 'Connor', 'Liam', 'John', 'Harry', 'Callum', 'Mason', 'Robert', 'Jacob', 'Jacob', 'Jacob', 'Michael', 'Charlie', 'Kyle', 'William', 'William', 'Thomas', 'Joe', 'Ethan', 'David', 'George', 'Reece', 'Michael', 'Richard', 'Oscar', 'Rhys', 'Alexander', 'Joseph', 'James', 'Charlie', 'James', 'Charles', 'William', 'Damian', 'Daniel', 'Thomas', 'Amelia', 'Margaret', 'Emma', 'Mary', 'Olivia', 'Samantha', 'Olivia', 'Patricia', 'Isla', 'Bethany'],
         surnames: ['Smith', 'Anderson', 'Clark', 'Wright', 'Mitchell', 'Johnson', 'Thomas', 'Rodriguez', 'Lopez', 'Perez', 'Williams', 'Jackson', 'Lewis', 'Hill', 'Roberts', 'Jones', 'White', 'Lee', 'Scott', 'Turner', 'Brown', 'Harris', 'Walker', 'Green', 'Phillips', 'Davis', 'Martin', 'Hall', 'Adams', 'Campbell', 'Miller', 'Thompson', 'Allen', 'Baker', 'Parker', 'Wilson', 'Garcia', 'Young', 'Gonzalez', 'Evans', 'Moore', 'Martinez', 'Hernandez', 'Nelson', 'Edwards', 'Taylor', 'Robinson', 'King', 'Carter', 'Collins'],
         }
-    },
-
-    computed: {
-        items () {
-            const namesLength = this.item.length
-            const colorsLength = this.colors.length
-
-            return Array.from({ length: 10000 }, (k, v) => {
-                const name = this.names[this.genRandomIndex(namesLength)]
-                const surname = this.surnames[this.genRandomIndex(surnamesLength)]
-
-            return {
-                color: this.colors[this.genRandomIndex(colorsLength)],
-                fullName: `${name} ${surname}`,
-                initials: `${name[0]} ${surname[0]}`,
-                }
-            })
-        },
     },
 
     methods: {
