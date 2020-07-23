@@ -2182,10 +2182,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data(vm) {
     return {
@@ -2193,7 +2189,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
       deactive: true,
-      valid: false
+      valid: false,
+      reglasDePeso: [function (v) {
+        return !!v || 'el peso es requerido';
+      }, function (v) {
+        return v && parseInt(v) <= 100 || 'el peso supera el 100% o es texto';
+      }]
     };
   },
   computed: {
@@ -2217,7 +2218,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
           dia = _fecha$split2[2];
 
       return "".concat(dia, "-").concat(mes, "-").concat(anio);
-    }
+    },
+    validate: function validate() {}
   }
 });
 
@@ -2331,6 +2333,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['productor'],
@@ -2338,30 +2342,70 @@ __webpack_require__.r(__webpack_exports__);
     return {
       tipoEval: null,
       empresaProveedora: '',
-      dialog: false,
+      paisEnvios: '',
+      dialog1: false,
+      dialog2: false,
+      proveedoresInicial: [],
+      proveedoresRenovacion: [],
       proveedores: [],
-      contenido: 'vacio',
-      paises: null
+      paises: [],
+      desactivado: true
     };
   },
   methods: {
-    cargarPaises: function cargarPaises(Paises) {},
     cargarLista: function cargarLista(tipoEval) {
+      if (tipoEval == 'inicial') {
+        console.log('hola');
+        this.paises = [];
+        this.paisEnvios = '';
+        this.empresaProveedora = null;
+        this.cargarListaPaises();
+        this.desactivado = true;
+        return;
+      }
+
+      if (this.tipoEval == 'renovacion') {
+        this.paises = [];
+        this.paisEnvios = '';
+        this.empresaProveedora = '';
+        this.desactivado = false;
+        this.cargarListaProveedores();
+      }
+    },
+    cargarListaProveedores: function cargarListaProveedores() {
       var _this = this;
 
-      this.empresaProveedora = '';
-
-      if (tipoEval == 'inicial' && this.contenido != 'inicial') {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/proveedores/".concat(this.productor.id_productor)).then(function (response) {
+      if (this.tipoEval == 'inicial') {
+        this.empresaProveedora = '';
+        var params = {
+          tipo_buqueda: 'inicial',
+          nombre: this.paisEnvios.nombre
+        };
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/proveedores", params).then(function (response) {
+          _this.proveedoresInicial = response.data;
+          _this.proveedores = response.data;
+        });
+        this.dialog1 = false;
+        this.desactivado = false;
+      } else if (this.tipoEval == 'renovacion') {
+        console.log('hola');
+        var _params = {
+          tipo_buqueda: 'renovacion',
+          id: this.productor.id_productor
+        };
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/proveedores", _params).then(function (response) {
+          console.log('ejecutado');
+          _this.proveedoresRenovacion = response.data;
           _this.proveedores = response.data;
         });
       }
+    },
+    cargarListaPaises: function cargarListaPaises() {
+      var _this2 = this;
 
-      if (tipoEval == 'renovacion' && this.contenido != 'renovacion') {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/proveedores/renovacion", this.productor).then(function (response) {
-          _this.proveedores = response.data;
-        });
-      }
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/paises/".concat(this.productor.id_productor)).then(function (response) {
+        _this2.paises = response.data;
+      });
     }
   }
 });
@@ -2509,7 +2553,9 @@ __webpack_require__.r(__webpack_exports__);
         return /^[0-9]{0,3}$/.test(v) || 'solo numeros';
       }, function (v) {
         return v && parseInt(v) <= 100 || 'el peso supera el 100% o es texto';
-      }]
+      }],
+      items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
+      valid: true
     };
   },
 
@@ -2529,7 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
        select:null,
      }],
   
-     valid: true,
+  
      pesoExito:'',
      reglasDePeso: [
        v => !!v || 'el peso es requerido', 
@@ -2752,7 +2798,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['productor'],
-  data: function data() {},
+  data: function data() {
+    return {};
+  },
   methods: {
     crearFormula: function crearFormula() {
       this.$emit('opcionFormula', 'formula');
@@ -2914,18 +2962,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       nombre: "selector productor",
-      colors: ['#2196F3', '#90CAF9', '#64B5F6', '#42A5F5', '#1E88E5', '#1976D2', '#1565C0', '#0D47A1', '#82B1FF', '#448AFF', '#2979FF', '#2962FF'],
-      names: ['Oliver', 'Jake', 'Noah', 'James', 'Jack', 'Connor', 'Liam', 'John', 'Harry', 'Callum', 'Mason', 'Robert', 'Jacob', 'Jacob', 'Jacob', 'Michael', 'Charlie', 'Kyle', 'William', 'William', 'Thomas', 'Joe', 'Ethan', 'David', 'George', 'Reece', 'Michael', 'Richard', 'Oscar', 'Rhys', 'Alexander', 'Joseph', 'James', 'Charlie', 'James', 'Charles', 'William', 'Damian', 'Daniel', 'Thomas', 'Amelia', 'Margaret', 'Emma', 'Mary', 'Olivia', 'Samantha', 'Olivia', 'Patricia', 'Isla', 'Bethany'],
-      surnames: ['Smith', 'Anderson', 'Clark', 'Wright', 'Mitchell', 'Johnson', 'Thomas', 'Rodriguez', 'Lopez', 'Perez', 'Williams', 'Jackson', 'Lewis', 'Hill', 'Roberts', 'Jones', 'White', 'Lee', 'Scott', 'Turner', 'Brown', 'Harris', 'Walker', 'Green', 'Phillips', 'Davis', 'Martin', 'Hall', 'Adams', 'Campbell', 'Miller', 'Thompson', 'Allen', 'Baker', 'Parker', 'Wilson', 'Garcia', 'Young', 'Gonzalez', 'Evans', 'Moore', 'Martinez', 'Hernandez', 'Nelson', 'Edwards', 'Taylor', 'Robinson', 'King', 'Carter', 'Collins']
+      colors: ['#2196F3', '#90CAF9', '#64B5F6', '#42A5F5', '#1E88E5', '#1976D2', '#1565C0', '#0D47A1', '#82B1FF', '#448AFF', '#2979FF', '#2962FF']
     };
   },
   methods: {
-    genRandomIndex: function genRandomIndex(length) {
-      return Math.ceil(Math.random() * (length - 1));
-    },
-    loadData: function loadData(datosObtenidos) {
-      this.nombre = datosObtenidos.fullName;
-    },
     seleccionar: function seleccionar(elemento) {
       this.$emit('elementSelect', elemento);
     }
@@ -4674,7 +4714,6 @@ var render = function() {
                     {
                       ref: "menu1",
                       attrs: {
-                        disabled: _vm.disabled,
                         "close-on-content-click": false,
                         "offset-y": "",
                         "max-width": "200px",
@@ -4694,7 +4733,6 @@ var render = function() {
                                     {
                                       attrs: {
                                         label: "fecha",
-                                        disabled: _vm.deactive,
                                         hint: "formato MM/DD/YYYY",
                                         "persistent-hint": "",
                                         "prepend-icon": "event"
@@ -4756,14 +4794,7 @@ var render = function() {
                 [
                   _c("v-switch", {
                     staticClass: "mx-2",
-                    attrs: { label: "sin vencimiento" },
-                    model: {
-                      value: _vm.disabled,
-                      callback: function($$v) {
-                        _vm.disabled = $$v
-                      },
-                      expression: "disabled"
-                    }
+                    attrs: { label: "sin vencimiento" }
                   })
                 ],
                 1
@@ -4793,13 +4824,6 @@ var render = function() {
                       rules: _vm.reglasDePeso,
                       label: "inicio",
                       required: ""
-                    },
-                    model: {
-                      value: _vm.inicio,
-                      callback: function($$v) {
-                        _vm.inicio = $$v
-                      },
-                      expression: "inicio"
                     }
                   })
                 ],
@@ -4824,13 +4848,6 @@ var render = function() {
                       rules: _vm.reglasDePeso,
                       label: "fin",
                       required: ""
-                    },
-                    model: {
-                      value: _vm.fin,
-                      callback: function($$v) {
-                        _vm.fin = $$v
-                      },
-                      expression: "fin"
                     }
                   })
                 ],
@@ -4926,8 +4943,8 @@ var render = function() {
           _c(
             "v-col",
             {
-              staticClass: "blue lighten-2 white--text text-right ",
-              attrs: { cols: "6" }
+              staticClass: "blue lighten-2 white--text text-left ",
+              attrs: { cols: "4" }
             },
             [
               _c("p", [
@@ -4939,8 +4956,8 @@ var render = function() {
           _c(
             "v-col",
             {
-              staticClass: "blue lighten-2 white--text text-right ",
-              attrs: { cols: "6" }
+              staticClass: "blue lighten-2 white--text text-center ",
+              attrs: { cols: "4" }
             },
             [
               _vm.empresaProveedora
@@ -4948,6 +4965,25 @@ var render = function() {
                     _vm._v(
                       "proveedor: -- " +
                         _vm._s(_vm.empresaProveedora.nombre) +
+                        " --"
+                    )
+                  ])
+                : _vm._e()
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            {
+              staticClass: "blue lighten-2 white--text text-right ",
+              attrs: { cols: "4" }
+            },
+            [
+              _vm.paisEnvios
+                ? _c("p", [
+                    _vm._v(
+                      "pais de preferencia: -- " +
+                        _vm._s(_vm.paisEnvios.nombre) +
                         " --"
                     )
                   ])
@@ -5011,118 +5047,120 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "v-row",
-        [
-          _c(
-            "v-col",
-            {
-              staticClass: "blue darken-2 white--text text-right pa-5",
-              attrs: { cols: "3" }
-            },
-            [_vm._v("\n              pais\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "v-col",
-            { staticClass: "blue lighten-5", attrs: { cols: "9" } },
+      _vm.tipoEval == "inicial"
+        ? _c(
+            "v-row",
             [
               _c(
-                "v-dialog",
+                "v-col",
                 {
-                  attrs: { scrollable: "", "max-width": "300px" },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "activator",
-                      fn: function(ref) {
-                        var on = ref.on
-                        var attrs = ref.attrs
-                        return [
-                          _c(
-                            "v-btn",
-                            _vm._g(
-                              _vm._b(
-                                { attrs: { color: "warning", dark: "" } },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
-                              on
-                            ),
-                            [
-                              _vm._v(
-                                "\n                    seleccionar lugar envio\n                    "
-                              )
-                            ]
-                          )
-                        ]
-                      }
-                    }
-                  ]),
-                  model: {
-                    value: _vm.dialog,
-                    callback: function($$v) {
-                      _vm.dialog = $$v
-                    },
-                    expression: "dialog"
-                  }
+                  staticClass: "blue darken-2 white--text text-right pa-5",
+                  attrs: { cols: "3" }
                 },
+                [_vm._v("\n              pais\n        ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { staticClass: "blue lighten-5", attrs: { cols: "9" } },
                 [
-                  _vm._v(" "),
                   _c(
-                    "v-card",
+                    "v-dialog",
+                    {
+                      attrs: { scrollable: "", "max-width": "300px" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "activator",
+                            fn: function(ref) {
+                              var on = ref.on
+                              return [
+                                _c(
+                                  "v-btn",
+                                  _vm._g(
+                                    {
+                                      attrs: {
+                                        disabled: _vm.paises.length == 0,
+                                        color: "warning",
+                                        dark: ""
+                                      }
+                                    },
+                                    on
+                                  ),
+                                  [
+                                    _vm._v(
+                                      "\n                    seleccionar lugar envio\n                    "
+                                    )
+                                  ]
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        false,
+                        3372058733
+                      ),
+                      model: {
+                        value: _vm.dialog1,
+                        callback: function($$v) {
+                          _vm.dialog1 = $$v
+                        },
+                        expression: "dialog1"
+                      }
+                    },
                     [
-                      _c("v-card-title", [_vm._v("elegir pais")]),
-                      _vm._v(" "),
-                      _c("v-divider"),
                       _vm._v(" "),
                       _c(
-                        "v-card-text",
-                        { staticStyle: { height: "400px" } },
-                        _vm._l(_vm.proveedores, function(proveedor) {
-                          return _c(
-                            "v-radio-group",
-                            {
-                              key: proveedor.id_proveedor,
-                              attrs: { column: "" },
-                              model: {
-                                value: _vm.empresaProveedora,
-                                callback: function($$v) {
-                                  _vm.empresaProveedora = $$v
+                        "v-card",
+                        [
+                          _c("v-card-title", [_vm._v("elegir pais")]),
+                          _vm._v(" "),
+                          _c("v-divider"),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-text",
+                            { staticStyle: { height: "400px" } },
+                            _vm._l(_vm.paises, function(pais) {
+                              return _c(
+                                "v-radio-group",
+                                {
+                                  key: pais.id_pais,
+                                  attrs: { column: "" },
+                                  model: {
+                                    value: _vm.paisEnvios,
+                                    callback: function($$v) {
+                                      _vm.paisEnvios = $$v
+                                    },
+                                    expression: "paisEnvios"
+                                  }
                                 },
-                                expression: "empresaProveedora"
-                              }
-                            },
+                                [
+                                  _c("v-radio", {
+                                    attrs: { label: pais.nombre, value: pais }
+                                  })
+                                ],
+                                1
+                              )
+                            }),
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("v-divider"),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-actions",
                             [
-                              _c("v-radio", {
-                                attrs: {
-                                  label: proveedor.nombre,
-                                  value: proveedor
-                                }
-                              })
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "blue darken-1", text: "" },
+                                  on: { click: _vm.cargarListaProveedores }
+                                },
+                                [_vm._v("aceptar")]
+                              )
                             ],
                             1
-                          )
-                        }),
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-divider"),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { color: "blue darken-1", text: "" },
-                              on: {
-                                click: function($event) {
-                                  _vm.dialog = false
-                                }
-                              }
-                            },
-                            [_vm._v("aceptar")]
                           )
                         ],
                         1
@@ -5136,9 +5174,7 @@ var render = function() {
             ],
             1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "v-row",
@@ -5165,25 +5201,17 @@ var render = function() {
                       key: "activator",
                       fn: function(ref) {
                         var on = ref.on
-                        var attrs = ref.attrs
                         return [
                           _c(
                             "v-btn",
                             _vm._g(
-                              _vm._b(
-                                {
-                                  attrs: {
-                                    disabled:
-                                      _vm.paises == null &&
-                                      _vm.tipoEval == null,
-                                    color: "primary",
-                                    dark: ""
-                                  }
-                                },
-                                "v-btn",
-                                attrs,
-                                false
-                              ),
+                              {
+                                attrs: {
+                                  disabled: _vm.desactivado,
+                                  color: "primary",
+                                  dark: ""
+                                }
+                              },
                               on
                             ),
                             [
@@ -5197,11 +5225,11 @@ var render = function() {
                     }
                   ]),
                   model: {
-                    value: _vm.dialog,
+                    value: _vm.dialog2,
                     callback: function($$v) {
-                      _vm.dialog = $$v
+                      _vm.dialog2 = $$v
                     },
-                    expression: "dialog"
+                    expression: "dialog2"
                   }
                 },
                 [
@@ -5255,7 +5283,7 @@ var render = function() {
                               attrs: { color: "blue darken-1", text: "" },
                               on: {
                                 click: function($event) {
-                                  _vm.dialog = false
+                                  _vm.dialog2 = false
                                 }
                               }
                             },
@@ -5624,7 +5652,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-component",
+    "v-row",
     [
       _c("opciones-formula-component", {
         directives: [
@@ -62022,6 +62050,20 @@ var app = new Vue({
 2.5 calcular – mostrar resultado más aprobación o no.
 2.6 si es aprobado preguntar si se quiere generar contrato (equivale a la confirmación proveedor)
 2.6.1 preguntar productos, preguntar condiciones envío y pago a tomar – crear contrato (guardar toda la info pertinente en la b/d)
+    pasos para implementar la 2.6.1
+    2.6.1: 1-entrar al menu de contratos
+           2-seleccionar el productor
+           3-lista de evaluaciones aprovadas (
+                comparar con el contrato mas reciente, 
+                    si esta evaluacion es despues del ultimo contrato pues se acepta
+                    si es de antes no aparce 
+                    )
+            4-preguntar por productos: tenemos que ver todos los productos del 
+            proveedor que no sean exclusivos
+                (UNA CONSULTA con contratos,ingrediente_esencia, ingrediente_otro,)
+            5-preguntar por las condiciones de envio de la empresa (seleccionar de la lista)
+            6-preguntar por las condiciones de pago(seleccionar de la lista)
+            7-crear el contrato
 
 2.1 si es renovación
 2.2 listar proveedores con contratos a vencer

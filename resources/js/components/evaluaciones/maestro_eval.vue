@@ -1,5 +1,5 @@
 <template>
-<v-component>
+<v-row>
     <opciones-formula-component
     class="offset-3"
     :productor="productor"
@@ -30,7 +30,7 @@
     :tipo="tipo"
     @elementSelect = "selecionarProveedor( ...arguments)"
     ></selector-component>
-</v-component>
+</v-row>
 
 
 </template>

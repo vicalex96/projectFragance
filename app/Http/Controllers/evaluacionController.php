@@ -8,10 +8,10 @@ use DB;
 class evaluacionController extends Controller
 {
     public function obtenerListadoInicial(Request $request){
-        return $request -> id_productor;
-/*
+        $nombre = $request -> id_productor;
+
         return DB::select( 
-            'select proveedor.id_proveedor, proveedor.nombre, pais.id_pais, pais.nombre as pais
+            `select proveedor.id_proveedor, proveedor.nombre, pais.id_pais, pais.nombre as pais
             from vam_condicion_envio as envio, vam_proveedor as proveedor, vam_pais as pais
             where envio.id_pais = pais.id_pais and envio.id_proveedor = proveedor.id_proveedor 
             and envio.id_proveedor in (select mi.id_proveedor 
@@ -19,8 +19,8 @@ class evaluacionController extends Controller
             where mi.fecha_final is null)
             and envio.id_pais in (select id_pais 
             from vam_Pais_Prod 
-            where vam_Pais_Prod.id_productor = :id)',['id' => $id] );
-*/
+            where vam_Pais_Prod.id_productor = ?)`,[$nombre] );
+
     }
 
     public function obtenerListadoRenovacion(Request $request){

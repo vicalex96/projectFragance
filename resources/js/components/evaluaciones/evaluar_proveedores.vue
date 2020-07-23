@@ -6,11 +6,14 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col class="blue lighten-2 white--text text-right " cols="6">
+            <v-col class="blue lighten-2 white--text text-left " cols="4">
                <p>productor: -- {{productor.nombre}} -- </p> 
             </v-col>
-            <v-col class="blue lighten-2 white--text text-right " cols="6">
+            <v-col class="blue lighten-2 white--text text-center " cols="4">
                 <p v-if="empresaProveedora">proveedor: -- {{empresaProveedora.nombre}} --</p> 
+            </v-col>
+            <v-col class="blue lighten-2 white--text text-right " cols="4">
+                <p v-if="paisEnvios">pais de preferencia: -- {{paisEnvios.nombre}} --</p> 
             </v-col>
         </v-row>
                 <v-row>
@@ -25,17 +28,17 @@
                     </v-radio-group> 
            </v-col>
         </v-row>
-                <v-row>
+        <v-row v-if="tipoEval=='inicial'">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="3">
                   pais
             </v-col>
             <v-col class="blue lighten-5" cols="9" >
-                <v-dialog v-model="dialog" scrollable max-width="300px">
-                    <template v-slot:activator="{ on, attrs }">
+                <v-dialog v-model="dialog1" scrollable max-width="300px">
+                    <template v-slot:activator="{ on}">
                         <v-btn
+                        :disabled=" paises.length == 0"
                          color="warning"
                         dark
-                        v-bind="attrs"
                         v-on="on"
                         >
                         seleccionar lugar envio
@@ -45,13 +48,13 @@
                         <v-card-title>elegir pais</v-card-title>
                         <v-divider></v-divider>
                         <v-card-text style="height: 400px;">
-                            <v-radio-group v-model="empresaProveedora" v-for="proveedor in proveedores" :key="proveedor.id_proveedor" column>
-                                <v-radio :label="proveedor.nombre" :value="proveedor"></v-radio>
+                            <v-radio-group v-model="paisEnvios" v-for="pais in paises" :key="pais.id_pais" column>
+                                <v-radio :label="pais.nombre" :value="pais"></v-radio>
                             </v-radio-group>
                         </v-card-text>
                         <v-divider></v-divider>
                         <v-card-actions>
-                            <v-btn color="blue darken-1" text @click="dialog = false">aceptar</v-btn>
+                            <v-btn color="blue darken-1" text @click="cargarListaProveedores">aceptar</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -62,13 +65,12 @@
                   proveedores
             </v-col>
             <v-col class="blue lighten-5" cols="9" >
-                <v-dialog v-model="dialog" scrollable max-width="300px">
-                    <template v-slot:activator="{ on, attrs }">
+                <v-dialog v-model="dialog2" scrollable max-width="300px">
+                    <template v-slot:activator="{ on }">
                         <v-btn
-                        :disabled="paises == null && tipoEval == null"
+                        :disabled="desactivado"
                          color="primary"
                         dark
-                        v-bind="attrs"
                         v-on="on"
                         >
                         listado de proveedores
@@ -84,7 +86,7 @@
                         </v-card-text>
                         <v-divider></v-divider>
                         <v-card-actions>
-                            <v-btn color="blue darken-1" text @click="dialog = false">aceptar</v-btn>
+                            <v-btn color="blue darken-1" text @click="dialog2 = false ">aceptar</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -103,31 +105,73 @@ export default {
         return{
             tipoEval:null,
             empresaProveedora: '',
-            dialog: false,
+            paisEnvios:'',
+            dialog1: false,
+            dialog2: false,
+            proveedoresInicial:[],
+            proveedoresRenovacion:[],
             proveedores:[],
-            contenido:'vacio',
-            paises:null,
+            paises:[],
+            desactivado: true,
         }
     },
     methods:{
-        cargarPaises(Paises){
-
-        },
         cargarLista(tipoEval){
-            this.empresaProveedora= ''
-            if(tipoEval== 'inicial' && this.contenido != 'inicial'){
-                axios.get(`/proveedores/${this.productor.id_productor}`)
+
+            if(tipoEval== 'inicial'){
+                console.log('hola')
+                this.paises = []
+                this.paisEnvios = ''
+                this.empresaProveedora = null
+                this.cargarListaPaises()
+                this.desactivado = true
+                return;
+            }
+
+            if(this.tipoEval == 'renovacion'){
+                this.paises = []
+                this.paisEnvios = ''
+                this.empresaProveedora = '' 
+                this.desactivado = false
+                this.cargarListaProveedores()
+            }
+        },
+        cargarListaProveedores(){
+            
+             if(this.tipoEval== 'inicial'){
+                 this.empresaProveedora = '' 
+                const params = {
+                    tipo_buqueda : 'inicial',
+                    nombre: this.paisEnvios.nombre,
+                }
+                axios.post(`/proveedores`,params)
                 .then((response)=>{
+                    this.proveedoresInicial = response.data;
                     this.proveedores = response.data;
-                });
-            }
-            if(tipoEval == 'renovacion' && this.contenido != 'renovacion'){
-                axios.get("/proveedores/renovacion", this.productor)
-                .then((response)=>{
-                    this.proveedores = response.data
-                });
+                })
+                this.dialog1 = false
+                this.desactivado = false  
                 
+
+            }else if(this.tipoEval == 'renovacion'){
+                console.log('hola')
+                const params = {
+                    tipo_buqueda : 'renovacion',
+                    id : this.productor.id_productor
+                }
+                axios.post(`/proveedores`,params)
+                .then((response)=>{
+                    console.log('ejecutado')
+                    this.proveedoresRenovacion = response.data;
+                    this.proveedores = response.data;
+                })
             }
+        },
+        cargarListaPaises(){
+            axios.get(`/paises/${this.productor.id_productor}`)
+            .then((response)=>{
+                    this.paises = response.data;
+            });
         }
     },
 }

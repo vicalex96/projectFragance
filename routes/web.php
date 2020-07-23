@@ -33,5 +33,6 @@ Route::get('/proveedores/renovacion','evaluacionController@obtenerListadoRenovac
 
 Route::apiResource('productores','productorController');
 Route::apiResource('proveedores','proveedorController');
+Route::apiResource('paises','paisController');
 
 

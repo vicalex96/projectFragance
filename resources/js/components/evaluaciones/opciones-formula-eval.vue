@@ -64,7 +64,9 @@
 export default {
     props:['productor'],
     data(){
+        return{
 
+        }      
     },
     methods:{
         crearFormula(){

@@ -39,6 +39,20 @@ const app = new Vue({
 2.5 calcular – mostrar resultado más aprobación o no.
 2.6 si es aprobado preguntar si se quiere generar contrato (equivale a la confirmación proveedor)
 2.6.1 preguntar productos, preguntar condiciones envío y pago a tomar – crear contrato (guardar toda la info pertinente en la b/d)
+    pasos para implementar la 2.6.1
+    2.6.1: 1-entrar al menu de contratos
+           2-seleccionar el productor
+           3-lista de evaluaciones aprovadas (
+                comparar con el contrato mas reciente, 
+                    si esta evaluacion es despues del ultimo contrato pues se acepta
+                    si es de antes no aparce 
+                    )
+            4-preguntar por productos: tenemos que ver todos los productos del 
+            proveedor que no sean exclusivos
+                (UNA CONSULTA con contratos,ingrediente_esencia, ingrediente_otro,)
+            5-preguntar por las condiciones de envio de la empresa (seleccionar de la lista)
+            6-preguntar por las condiciones de pago(seleccionar de la lista)
+            7-crear el contrato
 
 2.1 si es renovación
 2.2 listar proveedores con contratos a vencer

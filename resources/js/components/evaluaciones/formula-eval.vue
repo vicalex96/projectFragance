@@ -127,10 +127,18 @@ export default {
             select:null,
             }],
             reglasDePeso: [
-            v => !!v || 'el peso es requerido', 
-            v => (/^[0-9]{0,3}$/.test(v)|| 'solo numeros'),
-            v => (v && parseInt(v)<=100) || 'el peso supera el 100% o es texto',   
+                v => !!v || 'el peso es requerido', 
+                v => (/^[0-9]{0,3}$/.test(v)|| 'solo numeros'),
+                v => (v && parseInt(v)<=100) || 'el peso supera el 100% o es texto',   
             ],
+
+            items: [
+                'Item 1',
+                'Item 2',
+                'Item 3',
+                'Item 4',
+            ],
+            valid: true
       }
   },
  /*   data: () => ({
@@ -149,7 +157,7 @@ export default {
       select:null,
     }],
 
-    valid: true,
+
     pesoExito:'',
     reglasDePeso: [
       v => !!v || 'el peso es requerido', 

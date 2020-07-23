@@ -15,7 +15,6 @@
               <v-menu
               ref="menu1"
               v-model="menu1"
-              :disabled="disabled"
               :close-on-content-click="false"
               offset-y
               max-width="200px"
@@ -25,7 +24,6 @@
               <v-text-field
                 v-model="dateFormatted"
                 label="fecha"
-                :disabled="deactive"
                 hint="formato MM/DD/YYYY"
                 persistent-hint
                 prepend-icon="event"
@@ -38,7 +36,7 @@
           </v-col>
           
           <v-col class="blue lighten-5" cols="2" >
-            <v-switch v-model="disabled" class="mx-2" label="sin vencimiento"></v-switch>
+            <v-switch  class="mx-2" label="sin vencimiento"></v-switch>
           </v-col>
         </v-row>
         <v-row>
@@ -47,7 +45,6 @@
           </v-col>
           <v-col class="blue lighten-5" cols="2" >
               <v-text-field
-              v-model="inicio"
               :rules="reglasDePeso"
               label="inicio"
               required
@@ -58,7 +55,6 @@
           </v-col>
           <v-col class="blue lighten-5" cols="2" >
               <v-text-field
-              v-model="fin"
               :rules="reglasDePeso"
               label="fin"
               required
@@ -92,6 +88,10 @@ export default {
         menu1: false,
         deactive:true,
         valid:false,
+        reglasDePeso: [
+                v => !!v || 'el peso es requerido', 
+                v => (v && parseInt(v)<=100) || 'el peso supera el 100% o es texto',
+            ],
     }),
   
   
@@ -113,6 +113,9 @@ export default {
 
         const [anio, mes, dia] = fecha.split('-')
         return `${dia}-${mes}-${anio}`
+        },
+        validate(){
+
         },
     },
 }
