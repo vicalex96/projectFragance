@@ -146,22 +146,22 @@ export default {
                 }
                 axios.post(`/proveedores`,params)
                 .then((response)=>{
+                    console.log('incial')
                     this.proveedoresInicial = response.data;
                     this.proveedores = response.data;
                 })
                 this.dialog1 = false
                 this.desactivado = false  
-                
 
             }else if(this.tipoEval == 'renovacion'){
-                console.log('hola')
                 const params = {
+                    
                     tipo_buqueda : 'renovacion',
                     id : this.productor.id_productor
                 }
+                console.log('renovacion')
                 axios.post(`/proveedores`,params)
                 .then((response)=>{
-                    console.log('ejecutado')
                     this.proveedoresRenovacion = response.data;
                     this.proveedores = response.data;
                 })

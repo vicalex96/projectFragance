@@ -1,8 +1,8 @@
 <template>
 <v-container>
     <v-row>
-        <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="6">
-          {{tipo}}
+        <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="8">
+          elegir {{tipo}}
         </v-col>
     </v-row>
     <v-row v-for="(element) in lista" :key="element[0]">
@@ -10,7 +10,7 @@
             <v-list-item-avatar >
                 <v-avatar
                 :color="colors[0]"
-                size="56"
+                size="30"
                 class="white--text"
                 >
                 {{element.nombre.charAt(0)}}
@@ -22,7 +22,7 @@
                 <v-list-item-title>{{ element.nombre }}</v-list-item-title>
             </v-list-item-content>
         </v-col>
-        <v-col class="blue lighten-5" cols="2" >    
+        <v-col class="blue lighten-5" cols="4" >    
   
                 <v-list-item-action>
                     <v-btn
@@ -43,7 +43,7 @@
         </v-col>
     </v-row>  
     <v-row>
-        <v-col class="blue lighten-2 white--text text-center pa-3"  cols="6">
+        <v-col class="blue lighten-2 white--text text-center pa-3"  cols="8">
         </v-col>
     </v-row>        
     </v-container>

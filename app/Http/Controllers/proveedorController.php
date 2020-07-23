@@ -12,10 +12,10 @@ class proveedorController extends Controller
     }
 
     public function store(Request $request){
-        if($request-> tipo_buqueda == 'inicial'){
+        if($request->tipo_buqueda == 'inicial'){
             $nombre = $request->nombre ;
             return DB::select("
-                select proveedor.id_proveedor as id,*
+                select proveedor.id_proveedor as id,proveedor.nombre
                 from vam_proveedor as proveedor
                 where proveedor.id_proveedor in(
                     select proveedor.id_proveedor
@@ -31,7 +31,7 @@ class proveedorController extends Controller
                       and pais.id_pais = envio.id_pais 
                       and LOWER(pais.nombre) = LOWER('$nombre'))" );
         }
-        if($request-> tipo_buqueda == 'renovacion'){
+        if($request->tipo_buqueda == 'renovacion'){
             $id_productor = $request->id;
             return DB::select(" 
             select * from vam_proveedor where vam_proveedor.id_proveedor in(
@@ -42,8 +42,8 @@ class proveedorController extends Controller
                 where contrato.id_productor = productor.id_productor
                     and contrato.id_proveedor = proveedor.id_proveedor 
                     and productor.id_productor = $id_productor
-                    and 365 - (current_date - contrato.fecha_inicio) <= 30 
-                    and 365 - (current_date - contrato.fecha_inicio) >=0
+                    and (contrato.fecha_inicio - current_date ) <= 30 
+                    and (contrato.fecha_inicio - current_date ) >= 0
 	            )
             ");
         }

@@ -18,7 +18,7 @@ Route::get('/evaluaciones', function () {
     return view('evaluacion');
 });
 
-Route::get('/contratos', function () {
+Route::get('/gestionContrato', function () {
     return view('contrato');
 });
 
@@ -33,6 +33,9 @@ Route::get('/proveedores/renovacion','evaluacionController@obtenerListadoRenovac
 
 Route::apiResource('productores','productorController');
 Route::apiResource('proveedores','proveedorController');
+
 Route::apiResource('paises','paisController');
+
+Route::apiResource('contratosOpetations','documentoController');
 
 

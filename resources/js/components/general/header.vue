@@ -46,6 +46,7 @@
 </template>
 
 <script>
+
 export default {
   name:"ExampleComponent",
   data () {
@@ -61,7 +62,7 @@ export default {
       if(item=='inicio') window.location.href = '/inicio'
       if(item=='Recomendador') window.location.href = '/recomendador'
       if(item=='evaluaciones') window.location.href = '/evaluaciones'
-      if(item=='contratos') window.location.href = '/contratos'
+      if(item=='contratos') window.location.href = '/gestionContrato'
       if(item=='pedidos') window.location.href = '/pedidos'
     
       

@@ -19,6 +19,11 @@ Vue.component('maestroeval-component', require('./components/evaluaciones/maestr
 Vue.component('selector-component', require('./components/general/selector.vue').default);
 Vue.component('evaluar-proveedores', require('./components/evaluaciones/evaluar_proveedores.vue').default);
 
+
+Vue.component('maestro-contrato-component', require('./components/contratos/maestro_contract.vue').default);
+Vue.component('opciones-eval-component', require('./components/contratos/opciones_tipoeval.vue').default);
+Vue.component('crear-contrato-component', require('./components/contratos/crear-contrato.vue').default);
+
 const app = new Vue({
     el: '#app',
     vuetify: new Vuetify()
