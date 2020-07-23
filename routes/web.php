@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use PHPJasper\PHPJasper;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +20,38 @@ Route::get('/', function () {
 
 
 Route::resource('/productores', 'ProductorController');
+
+Route::get('/compilarReporte', function () {
+    $input = base_path() .
+    '/vendor/geekcom/phpjasper/examples/hello_world.jrxml';
+
+    $jasper = new PHPJasper;
+    $jasper->compile($input)->execute();
+
+    return response()->json([
+        'status' => 'ok',
+        'msj' => '¡Reporte compilado!'
+    ]);
+});
+
+Route::get('/reporte', function () {
+    $input = base_path() .
+    '/vendor/geekcom/phpjasper/examples/hello_world.jasper';
+    $output = base_path() .
+    '/vendor/geekcom/phpjasper/examples';
+    $options = [
+        'format' => ['pdf']
+    ];
+
+    $jasper = new PHPJasper;
+
+    $jasper->process(
+        $input,
+        $output,
+        $options
+    )->execute();
+
+    $pathToFile = base_path() .
+    '/vendor/geekcom/phpjasper/examples/hello_world.pdf';
+    return response()->file($pathToFile);
+});
