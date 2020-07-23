@@ -2143,6 +2143,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['productor', 'proveedores'],
@@ -2151,51 +2259,49 @@ __webpack_require__.r(__webpack_exports__);
       botonOtro: false,
       provAprobados: [],
       botonProveedor: false,
+      botonProveedor2: true,
+      botonProveedorData: true,
       provDialog: false,
+      ingredienteDialog: false,
+      pagoDialog: false,
+      envioDialog: false,
       nombre_prov: '',
       proveedor: '',
+      producto: [],
       productos: [],
+      productosselect: [],
       c_envio: [],
-      c_pago: []
+      c_envio_select: [],
+      c_pago: [],
+      c_pago_select: []
     };
-  },
-  watch: {
-    cargarListaProveedores: function cargarListaProveedores() {
-      var _this = this;
-
-      if (provAprobados.legnth == 0) {
-        var params = {
-          buscar: 'proveedores',
-          id: this.productor.id,
-          tipo: 'inicial'
-        };
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/contratosOpetations", params).then(function (response) {
-          _this.provAprobados = response.data;
-        });
-      }
-    }
   },
   methods: {
     cargarDataProveedores: function cargarDataProveedores() {
-      /*
-      let params = {
-              buscar : 'productos',
-              id : this.proveedor.id,
-              tipo : 'inicial'
-          }
-      axios.post("/contratosOpetations",params).then((response)=>{
-          this.productos = response.data
-            params. buscar = 'condiciones-pago'
-          axios.post("/contratosOpetations",params).then((response)=>{
-          this.provAprobados = response.data
-                params. buscar = 'condiciones-envio'
-              axios.post("/contratosOpetations",params).then((response)=>{
-              this.provAprobados = response.data
-              })
-          })
-      })
-          console.log(this.proveedor)
-      this.provDialog = false;*/
+      var _this = this;
+
+      this.provDialog = false, this.productosselect = [], this.c_envio = [], this.c_pago = [];
+      var params = {
+        buscar: 'productos',
+        id: this.proveedor.id_proveedor,
+        tipo: 'inicial'
+      };
+      console.log(this.proveedor.id_proveedor);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/contratosOpetations", params).then(function (response) {
+        _this.productos = response.data;
+        params.buscar = 'condiciones-pago';
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/contratosOpetations", params).then(function (response) {
+          _this.c_pago = response.data;
+          params.buscar = 'condiciones-envio';
+          axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/contratosOpetations", params).then(function (response) {
+            _this.c_envio = response.data;
+          });
+        });
+      });
+
+      if (this.proveedor.length != 0) {
+        this.botonProveedor2 = false;
+      }
     }
   }
 });
@@ -5125,6 +5231,384 @@ var render = function() {
                             {
                               attrs: { color: "blue darken-1", text: "" },
                               on: { click: _vm.cargarDataProveedores }
+                            },
+                            [_vm._v("aceptar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        [
+          _c(
+            "v-col",
+            {
+              staticClass: "blue darken-3 white--text text-right pa-5",
+              attrs: { cols: "3" }
+            },
+            [_vm._v("\n              ingredientes disponibles\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { staticClass: "blue lighten-5", attrs: { cols: "9" } },
+            [
+              _c(
+                "v-dialog",
+                {
+                  attrs: { scrollable: "", "max-width": "300px" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              {
+                                attrs: {
+                                  disabled: _vm.botonProveedor2,
+                                  color: "suceess",
+                                  dark: ""
+                                }
+                              },
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n                    seleccionar ingredientes\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.ingredienteDialog,
+                    callback: function($$v) {
+                      _vm.ingredienteDialog = $$v
+                    },
+                    expression: "ingredienteDialog"
+                  }
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [_vm._v("elegir ingredientes")]),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        { staticStyle: { height: "400px" } },
+                        _vm._l(_vm.productos, function(elemento) {
+                          return _c(
+                            "v-radio-group",
+                            {
+                              key: elemento[0],
+                              model: {
+                                value: _vm.productosselect,
+                                callback: function($$v) {
+                                  _vm.productosselect = $$v
+                                },
+                                expression: "productosselect"
+                              }
+                            },
+                            [
+                              _c("v-radio", {
+                                attrs: {
+                                  label: elemento.producto_no_exclusivo,
+                                  value: elemento
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.ingredienteDialog = false
+                                }
+                              }
+                            },
+                            [_vm._v("aceptar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.productosselect != 0
+                ? _c("div", [_vm._v(" pingredientes deseados:")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.productosselect, function(elemento) {
+                return _c(
+                  "div",
+                  { key: elemento[0], staticClass: "blue lighten-5" },
+                  [
+                    _vm._v(
+                      "\n              " + _vm._s(elemento) + ",\n            "
+                    )
+                  ]
+                )
+              })
+            ],
+            2
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        [
+          _c(
+            "v-col",
+            {
+              staticClass: "blue darken-3 white--text text-right pa-5",
+              attrs: { cols: "3" }
+            },
+            [_vm._v("\n              condiciones de pago\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { staticClass: "blue lighten-5", attrs: { cols: "9" } },
+            [
+              _c(
+                "v-dialog",
+                {
+                  attrs: { scrollable: "", "max-width": "300px" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              {
+                                attrs: {
+                                  disabled: _vm.botonProveedor2,
+                                  color: "error",
+                                  dark: ""
+                                }
+                              },
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n                    seleccionar condiciones\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.ingredienteDialog,
+                    callback: function($$v) {
+                      _vm.ingredienteDialog = $$v
+                    },
+                    expression: "ingredienteDialog"
+                  }
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [_vm._v("elegir condicion")]),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        { staticStyle: { height: "400px" } },
+                        _vm._l(_vm.c_pago, function(pago) {
+                          return _c("v-checkbox", {
+                            key: pago[0],
+                            attrs: { value: pago.tipo_condicion },
+                            model: {
+                              value: _vm.c_pago_select,
+                              callback: function($$v) {
+                                _vm.c_pago_select = $$v
+                              },
+                              expression: "c_pago_select"
+                            }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.pagoDialog = false
+                                }
+                              }
+                            },
+                            [_vm._v("aceptar")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-row",
+        [
+          _c(
+            "v-col",
+            {
+              staticClass: "blue darken-3 white--text text-right pa-5",
+              attrs: { cols: "3" }
+            },
+            [_vm._v("\n              condiciones de envio\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "v-col",
+            { staticClass: "blue lighten-5", attrs: { cols: "9" } },
+            [
+              _c(
+                "v-dialog",
+                {
+                  attrs: { scrollable: "", "max-width": "300px" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "activator",
+                      fn: function(ref) {
+                        var on = ref.on
+                        return [
+                          _c(
+                            "v-btn",
+                            _vm._g(
+                              {
+                                attrs: {
+                                  disabled: _vm.botonProveedor2,
+                                  color: "error",
+                                  dark: ""
+                                }
+                              },
+                              on
+                            ),
+                            [
+                              _vm._v(
+                                "\n                    seleccionar condiciones\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.ingredienteDialog,
+                    callback: function($$v) {
+                      _vm.ingredienteDialog = $$v
+                    },
+                    expression: "ingredienteDialog"
+                  }
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", [_vm._v("elegir condicion")]),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-text",
+                        { staticStyle: { height: "400px" } },
+                        _vm._l(_vm.c_envio, function(envio) {
+                          return _c("v-checkbox", {
+                            key: envio[0],
+                            attrs: { value: envio.medio_transporte },
+                            model: {
+                              value: _vm.c_envio_select,
+                              callback: function($$v) {
+                                _vm.c_envio_select = $$v
+                              },
+                              expression: "c_envio_select"
+                            }
+                          })
+                        }),
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "blue darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  _vm.envioDialog = false
+                                }
+                              }
                             },
                             [_vm._v("aceptar")]
                           )

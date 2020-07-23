@@ -37,22 +37,19 @@ class documentoController extends Controller
         }
         if( $request ->buscar == 'productos'){
                 $id_proveedor= $request->id;
-                return DB::select("
-                select Producto_No_Exclusivo
-                from (select ie.nombre as Producto_No_Exclusivo,
-		            from vam_elemento_contrato as ec, vam_ingrediente_esencia as ie
-		            where (ec.id_ingrediente_esencia = ie.id_ingrediente_esencia) and ec.id_contrato in (
-				            select con.id_contrato 
-				            from vam_contrato as con 
-                            where con.exclusividad='no' and  id_proveedor = '$id_proveedor')  
-		        UNION ALL
-		        select io.nombre as Producto_No_Exclusivo,
-		        from vam_elemento_contrato as ec, vam_ingrediente_otro as io
-		        where (ec.id_ingrediente_otro = io.id_ingrediente_otro) and ec.id_contrato in (
-				    select con.id_contrato
-				    from vam_contrato as con 
-				    where con.exclusividad='no' and id_proveedor= '$id_proveedor' )
-	 			    )ProductosExclusivos;
+                return DB::select("select Producto_No_Exclusivo
+                from (select ie.nombre as Producto_No_Exclusivo
+                        from vam_elemento_contrato as ec, vam_ingrediente_esencia as ie
+                        where (ec.id_ingrediente_esencia = ie.id_ingrediente_esencia) and ec.id_contrato in (select con.id_contrato 
+                                from vam_contrato as con 
+                                where con.exclusividad='no' and  id_proveedor = '$id_proveedor')  
+                        
+                        UNION ALL
+                        select io.nombre as Producto_No_Exclusivo
+                        from vam_elemento_contrato as ec, vam_ingrediente_otro as io
+                        where (ec.id_ingrediente_otro = io.id_ingrediente_otro) and ec.id_contrato in (select con.id_contrato
+                                        from vam_contrato as con 
+                                        where con.exclusividad='no' and id_proveedor= '$id_proveedor'))ProductosExclusivos;
                 ");
             
         }
