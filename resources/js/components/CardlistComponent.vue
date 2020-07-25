@@ -2,8 +2,7 @@
   <v-container class="grey lighten-5">
     <v-row no-gutters>
       <v-col
-        v-for="n in 3"
-        :key="n"
+
         cols="12"
         sm="4"
       >

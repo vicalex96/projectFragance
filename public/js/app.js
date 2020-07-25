@@ -3406,37 +3406,198 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
+    { staticClass: "mx-auto", attrs: { "max-width": "375" } },
     [
       _c(
-        "v-list-item",
+        "v-img",
+        {
+          attrs: {
+            src: "https://cdn.vuetifyjs.com/images/lists/ali.png",
+            height: "300px",
+            dark: ""
+          }
+        },
         [
           _c(
-            "v-list-item-content",
+            "v-row",
+            { staticClass: "fill-height" },
             [
-              _c("div", [_vm._v("OVERLINE")]),
+              _c(
+                "v-card-title",
+                [
+                  _c(
+                    "v-btn",
+                    { attrs: { dark: "", icon: "" } },
+                    [_c("v-icon", [_vm._v("mdi-chevron-left")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    { staticClass: "mr-4", attrs: { dark: "", icon: "" } },
+                    [_c("v-icon", [_vm._v("mdi-pencil")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    { attrs: { dark: "", icon: "" } },
+                    [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
+                    1
+                  )
+                ],
+                1
+              ),
               _vm._v(" "),
-              _c("v-list-item-title", [_vm._v("Headline")]),
+              _c("v-spacer"),
               _vm._v(" "),
-              _c("v-list-item-subtitle", [
-                _vm._v("Greyhound divisely hello coldly fonwderfully")
+              _c("v-card-title", { staticClass: "white--text pl-12 pt-12" }, [
+                _c("div", { staticClass: "display-1 pl-12 pt-12" }, [
+                  _vm._v("Ali Conners")
+                ])
               ])
             ],
             1
-          ),
-          _vm._v(" "),
-          _c("v-list-item-avatar", {
-            attrs: { tile: "", size: "80", color: "blue" }
-          })
+          )
         ],
         1
       ),
       _vm._v(" "),
       _c(
-        "v-card-actions",
+        "v-list",
+        { attrs: { "two-line": "" } },
         [
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v("Button")]),
+          _c(
+            "v-list-item",
+            [
+              _c(
+                "v-list-item-icon",
+                [
+                  _c("v-icon", { attrs: { color: "indigo" } }, [
+                    _vm._v("mdi-phone")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c("v-list-item-title", [_vm._v("(650) 555-1234")]),
+                  _vm._v(" "),
+                  _c("v-list-item-subtitle", [_vm._v("Mobile")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-icon",
+                [_c("v-icon", [_vm._v("mdi-message-text")])],
+                1
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { text: "" } }, [_vm._v("Button")])
+          _c(
+            "v-list-item",
+            [
+              _c("v-list-item-action"),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c("v-list-item-title", [_vm._v("(323) 555-6789")]),
+                  _vm._v(" "),
+                  _c("v-list-item-subtitle", [_vm._v("Work")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-icon",
+                [_c("v-icon", [_vm._v("mdi-message-text")])],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-divider", { attrs: { inset: "" } }),
+          _vm._v(" "),
+          _c(
+            "v-list-item",
+            [
+              _c(
+                "v-list-item-icon",
+                [
+                  _c("v-icon", { attrs: { color: "indigo" } }, [
+                    _vm._v("mdi-email")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c("v-list-item-title", [_vm._v("aliconnors@example.com")]),
+                  _vm._v(" "),
+                  _c("v-list-item-subtitle", [_vm._v("Personal")])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-list-item",
+            [
+              _c("v-list-item-action"),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c("v-list-item-title", [_vm._v("ali_connors@example.com")]),
+                  _vm._v(" "),
+                  _c("v-list-item-subtitle", [_vm._v("Work")])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-divider", { attrs: { inset: "" } }),
+          _vm._v(" "),
+          _c(
+            "v-list-item",
+            [
+              _c(
+                "v-list-item-icon",
+                [
+                  _c("v-icon", { attrs: { color: "indigo" } }, [
+                    _vm._v("mdi-map-marker")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item-content",
+                [
+                  _c("v-list-item-title", [_vm._v("1400 Main Street")]),
+                  _vm._v(" "),
+                  _c("v-list-item-subtitle", [_vm._v("Orlando, FL 79938")])
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       )
@@ -3473,10 +3634,10 @@ var render = function() {
       _c(
         "v-row",
         { attrs: { "no-gutters": "" } },
-        _vm._l(3, function(n) {
-          return _c(
+        [
+          _c(
             "v-col",
-            { key: n, attrs: { cols: "12", sm: "4" } },
+            { attrs: { cols: "12", sm: "4" } },
             [
               _c(
                 "v-card",
@@ -3487,7 +3648,7 @@ var render = function() {
             ],
             1
           )
-        }),
+        ],
         1
       )
     ],
