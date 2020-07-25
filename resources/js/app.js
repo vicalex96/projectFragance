@@ -12,6 +12,9 @@ Vue.use(Vuetify);
 
 Vue.component('listaproductores-component', require('./components/ListaProductoresComponent.vue').default);
 
+Vue.component('cardlist-component', require('./components/CardlistComponent.vue').default);
+Vue.component('card-component', require('./components/CardComponent.vue').default);
+
 Vue.component('recomendador-component', require('./components/Recomendador.vue').default);
 
 Vue.component('barradetareas-component', require('./components/BarradeTareasComponent.vue').default);
