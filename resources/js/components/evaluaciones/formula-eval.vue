@@ -115,20 +115,25 @@
                 <v-col class="blue lighten-4" cols="8"> </v-col>
             </v-row>
 
-            <v-row>
+            <v-row class="justify-center">
                 <v-col
                     class="blue darken-2 white--text text-right pa-5"
                     cols="2"
                 >
                 </v-col>
-                <v-col class="blue lighten-3 text-right" cols="10">
+                <v-col class="blue lighten-3 text-left" cols="5">
+                    <v-btn color="error" class="mr-4" @click="cancelarFormula">
+                        cancelar
+                    </v-btn>
+                </v-col>
+                <v-col class="blue lighten-3 text-right" cols="5">
                     <v-btn
                         :disabled="!dataFormula.valid"
                         color="success"
                         class="mr-4"
                         @click="crearFormula"
                     >
-                        crear formula
+                        crear
                     </v-btn>
                 </v-col>
             </v-row>
@@ -153,13 +158,28 @@
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn
-                            color="green darken-1"
-                            text
-                            @click="guardarFormula"
-                        >
-                            aceptar
-                        </v-btn>
+                        <v-col>
+                            <v-btn
+                                class="text-right"
+                                color="red darken-1"
+                                v-if="dataFormula.cancelar == true"
+                                @click="dataFormula.dialog = false"
+                                text
+                            >
+                                cancelar
+                            </v-btn>
+                        </v-col>
+
+                        <v-col>
+                            <v-btn
+                                class="text-right"
+                                color="green darken-1"
+                                text
+                                @click="ejecutarAccionDialog()"
+                            >
+                                aceptar
+                            </v-btn>
+                        </v-col>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -189,7 +209,8 @@ export default {
                 descripcion: "",
                 dialog: false,
                 valid: false,
-                status: 0
+                status: 0,
+                cancelar: false
             },
             formulasPrevias: ""
         };
@@ -276,13 +297,10 @@ export default {
         },
         crearFormula() {
             let resultado = this.comprobarData();
+            this.dataFormula.cancelar = false;
             switch (resultado) {
                 case 1:
-                    this.dataFormula.mensaje =
-                        "La formula se ha creado correctamente";
-                    this.dataFormula.descripcion =
-                        "todos los datos se han guardado";
-                    this.dataFormula.status = 1;
+                    this.guardarFormula();
                     break;
                 default:
                     this.eliminarCriterio(this.criterios.length - 1);
@@ -386,13 +404,45 @@ export default {
             axios
                 .post("/evaluaciones/crear-formula", formula)
                 .then(response => {
-                    console.log(response.data);
+                    this.dataFormula.mensaje = "formula creada correctamente";
+                    this.dataEscala.descripcion = "informacion guardada";
+                    this.dataEscala.dialog = true;
+                    this.dataEscala.status = 1;
+                })
+                .catch(error => {
+                    this.dataEscala.mensaje =
+                        "-Error: no fue posible guardar los datos";
+                    this.dataEscala.descripcion =
+                        "hubo un error al tratar de almacenar la data";
+                    this.dataEscala.status = -2;
+                    this.dataEscala.dialog = true;
                 });
             this.dataFormula.dialog = false;
             this.$emit("regresarAtras", true);
         },
         cancelarFormula() {
-            this.$emit("regresarAtras", false);
+            this.dataFormula.cancelar = true;
+            this.dataFormula.mensaje =
+                "¿Seguro que quieres salir sin crear la formula?";
+            this.dataFormula.descripcion =
+                "los cambios no se guardaran si te sales ahora";
+            this.dataFormula.status = -2;
+            this.dataFormula.dialog = true;
+        },
+        ejecutarAccionDialog() {
+            if (this.dataFormula.cancelar == true) {
+                this.dataFormula = {
+                    mensaje: "",
+                    descripcion: "",
+                    dialog: false,
+                    valid: false,
+                    status: 0,
+                    cancelar: false
+                }
+                this.criterios = []
+                this.$emit("regresarPantalla", "menu");
+            }
+            this.dataFormula.dialog = false;
         }
     }
 };

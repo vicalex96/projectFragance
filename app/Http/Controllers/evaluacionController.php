@@ -70,5 +70,21 @@ class evaluacionController extends Controller
         values('$id_productor','$id_escala_v',current_date,'$r_inicio','$r_final');");
     }
 
+    public function obteneSrFormulas(Request $request){
+        $id_productor = $request;
+        return DB::select("select 
+                criterio.id_variable, SS
+                criterio.fecha_inicio, 
+                variable.nombre, 
+                criterio.peso, 
+                criterio.tipopor 
+            from vam_evaluacion_criterio as criterio, 
+                vam_variable as variable
+            where criterio.id_variable = variable.id_variable 
+                and variable.id_variable = criterio.id_variable
+                and criterio.fecha_fin is null
+                and criterio.id_productor = '$id_productor'");
+    }
+
 
 }

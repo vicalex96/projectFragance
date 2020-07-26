@@ -20,6 +20,9 @@ Route::get('/evaluaciones', function () {
 Route::get('/evaluaciones/variables', 'evaluacionController@obtenerVariables');
 Route::post('/evaluaciones/crear-formula', 'evaluacionController@crearFormula');
 Route::post('/evaluaciones/crear-escala', 'evaluacionController@crearEscala');
+Route::post('/evaluaciones/formularios-vigentes', 'evaluacionController@obtenerFormulas');
+
+
 
 Route::get('/gestionContrato', function () {
     return view('contrato');

@@ -2599,6 +2599,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["productor"],
@@ -2614,19 +2638,20 @@ __webpack_require__.r(__webpack_exports__);
       dataEscala: {
         mensaje: "",
         descripcion: "",
-        inicio: 0,
-        "final": 0,
+        inicio: '',
+        "final": '',
         valid: false,
         dialog: false,
-        status: 0
-      },
-      escalat: ''
+        status: 0,
+        cancelar: false
+      }
     };
   },
   computed: {},
   watch: {},
   methods: {
     crearEscala: function crearEscala() {
+      this.dataEscala.cancelar = false;
       var resultado = this.comprobarData();
 
       switch (resultado) {
@@ -2643,7 +2668,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     comprobarData: function comprobarData() {
-      if (this.dataEscala.inicio >= this.dataEscala["final"]) {
+      if (parseInt(this.dataEscala.inicio) >= parseInt(this.dataEscala["final"])) {
         return -1;
       }
 
@@ -2659,8 +2684,6 @@ __webpack_require__.r(__webpack_exports__);
         rango_final: this.dataEscala["final"]
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/evaluaciones/crear-escala", escala).then(function (response) {
-        _this.escalat = response.data;
-        console.log(_this.escalat);
         _this.dataEscala.mensaje = "Escala creada correctamente";
         _this.dataEscala.descripcion = "informacion guardada";
         _this.dataEscala.dialog = true;
@@ -2671,6 +2694,30 @@ __webpack_require__.r(__webpack_exports__);
         _this.dataEscala.status = -2;
         _this.dataEscala.dialog = true;
       });
+    },
+    cancelarEscala: function cancelarEscala() {
+      this.dataEscala.cancelar = true;
+      this.dataEscala.mensaje = "¿Seguro que quieres salir sin crear la escala?";
+      this.dataEscala.descripcion = "los cambios no se guardaran si te sales ahora";
+      this.dataEscala.status = -2;
+      this.dataEscala.dialog = true;
+    },
+    ejecutarAccionDialog: function ejecutarAccionDialog() {
+      if (this.dataEscala.cancelar == true) {
+        this.dataEscala = {
+          mensaje: "",
+          descripcion: "",
+          inicio: '',
+          "final": '',
+          valid: false,
+          dialog: false,
+          status: 0,
+          cancelar: false
+        };
+        this.$emit('regresarPantalla', 'menu');
+      }
+
+      this.dataEscala.dialog = false;
     }
   }
 });
@@ -3037,6 +3084,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["productor", "variables"],
@@ -3060,9 +3134,10 @@ __webpack_require__.r(__webpack_exports__);
         descripcion: "",
         dialog: false,
         valid: false,
-        status: 0
+        status: 0,
+        cancelar: false
       },
-      formulasPrevias: ''
+      formulasPrevias: ""
     };
   },
   computed: {
@@ -3091,7 +3166,7 @@ __webpack_require__.r(__webpack_exports__);
     revisarFormulasExistentes: function revisarFormulasExistentes() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/evaluaciones/formulas', this.productor).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/evaluaciones/formulas", this.productor).then(function (response) {
         _this.variablesFormula = response.data;
       });
     }
@@ -3141,12 +3216,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     crearFormula: function crearFormula() {
       var resultado = this.comprobarData();
+      this.dataFormula.cancelar = false;
 
       switch (resultado) {
         case 1:
-          this.dataFormula.mensaje = "La formula se ha creado correctamente";
-          this.dataFormula.descripcion = "todos los datos se han guardado";
-          this.dataFormula.status = 1;
+          this.guardarFormula();
           break;
 
         default:
@@ -3239,20 +3313,50 @@ __webpack_require__.r(__webpack_exports__);
       return 1;
     },
     guardarFormula: function guardarFormula() {
+      var _this2 = this;
+
       this.guardarCriterioExito(this.pesoExito);
       var formula = {
         criterios: this.criterios,
         tipoEval: this.tipoEval,
         id_productor: this.productor.id_productor
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/evaluaciones/crear-formula', formula).then(function (response) {
-        console.log(response.data);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/evaluaciones/crear-formula", formula).then(function (response) {
+        _this2.dataFormula.mensaje = "formula creada correctamente";
+        _this2.dataEscala.descripcion = "informacion guardada";
+        _this2.dataEscala.dialog = true;
+        _this2.dataEscala.status = 1;
+      })["catch"](function (error) {
+        _this2.dataEscala.mensaje = "-Error: no fue posible guardar los datos";
+        _this2.dataEscala.descripcion = "hubo un error al tratar de almacenar la data";
+        _this2.dataEscala.status = -2;
+        _this2.dataEscala.dialog = true;
       });
       this.dataFormula.dialog = false;
-      this.$emit('regresarAtras', true);
+      this.$emit("regresarAtras", true);
     },
     cancelarFormula: function cancelarFormula() {
-      this.$emit('regresarAtras', false);
+      this.dataFormula.cancelar = true;
+      this.dataFormula.mensaje = "¿Seguro que quieres salir sin crear la formula?";
+      this.dataFormula.descripcion = "los cambios no se guardaran si te sales ahora";
+      this.dataFormula.status = -2;
+      this.dataFormula.dialog = true;
+    },
+    ejecutarAccionDialog: function ejecutarAccionDialog() {
+      if (this.dataFormula.cancelar == true) {
+        this.dataFormula = {
+          mensaje: "",
+          descripcion: "",
+          dialog: false,
+          valid: false,
+          status: 0,
+          cancelar: false
+        };
+        this.criterios = [];
+        this.$emit("regresarPantalla", "menu");
+      }
+
+      this.dataFormula.dialog = false;
     }
   }
 });
@@ -3304,6 +3408,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3313,7 +3419,8 @@ __webpack_require__.r(__webpack_exports__);
       lista: [],
       productor: [],
       escalaView: false,
-      opcion: "menu"
+      opcion: "menu",
+      formulas: []
     };
   },
   mounted: function mounted() {
@@ -3350,6 +3457,18 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/evaluaciones/variables").then(function (response) {
         _this3.variablesFormula = response.data;
       });
+    },
+    obtenerFormulario: function obtenerFormulario() {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/evaluaciones/formularios-vigentes", this.productor.id_productor).then(function (response) {
+        _this4.formulas = response.data;
+      });
+    },
+    regresarPantalla: function regresarPantalla(pantalla) {
+      if (pantalla == "menu") {
+        this.opcion = pantalla;
+      }
     }
   }
 });
@@ -6245,8 +6364,28 @@ var render = function() {
               _c(
                 "v-col",
                 {
+                  staticClass: "blue lighten-3 text-left",
+                  attrs: { cols: "4" }
+                },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-4",
+                      attrs: { color: "error" },
+                      on: { click: _vm.cancelarEscala }
+                    },
+                    [_vm._v("\n                    cancelar\n                ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                {
                   staticClass: "blue lighten-3 text-right",
-                  attrs: { cols: "6" }
+                  attrs: { cols: "2" }
                 },
                 [
                   _c(
@@ -6259,11 +6398,7 @@ var render = function() {
                       },
                       on: { click: _vm.crearEscala }
                     },
-                    [
-                      _vm._v(
-                        "\n                    crear formula\n                "
-                      )
-                    ]
+                    [_vm._v("\n                    crear\n                ")]
                   )
                 ],
                 1
@@ -6320,20 +6455,54 @@ var render = function() {
                       _c("v-spacer"),
                       _vm._v(" "),
                       _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green darken-1", text: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.dataEscala.dialog = false
-                            }
-                          }
-                        },
+                        "v-col",
                         [
-                          _vm._v(
-                            "\n                        aceptar\n                    "
+                          _vm.dataEscala.cancelar == true
+                            ? _c(
+                                "v-btn",
+                                {
+                                  staticClass: "text-right",
+                                  attrs: { color: "red darken-1", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dataEscala.dialog = false
+                                      _vm.dataEscala.cancelar = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            cancelar\n                        "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "text-right",
+                              attrs: { color: "green darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.ejecutarAccionDialog()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        aceptar\n                    "
+                              )
+                            ]
                           )
-                        ]
+                        ],
+                        1
                       )
                     ],
                     1
@@ -7062,6 +7231,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c("v-col", {
                 staticClass: "blue darken-2 white--text text-right pa-5",
@@ -7071,8 +7241,28 @@ var render = function() {
               _c(
                 "v-col",
                 {
+                  staticClass: "blue lighten-3 text-left",
+                  attrs: { cols: "5" }
+                },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-4",
+                      attrs: { color: "error" },
+                      on: { click: _vm.cancelarFormula }
+                    },
+                    [_vm._v("\n                    cancelar\n                ")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                {
                   staticClass: "blue lighten-3 text-right",
-                  attrs: { cols: "10" }
+                  attrs: { cols: "5" }
                 },
                 [
                   _c(
@@ -7085,11 +7275,7 @@ var render = function() {
                       },
                       on: { click: _vm.crearFormula }
                     },
-                    [
-                      _vm._v(
-                        "\n                    crear formula\n                "
-                      )
-                    ]
+                    [_vm._v("\n                    crear\n                ")]
                   )
                 ],
                 1
@@ -7146,16 +7332,53 @@ var render = function() {
                       _c("v-spacer"),
                       _vm._v(" "),
                       _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "green darken-1", text: "" },
-                          on: { click: _vm.guardarFormula }
-                        },
+                        "v-col",
                         [
-                          _vm._v(
-                            "\n                        aceptar\n                    "
+                          _vm.dataFormula.cancelar == true
+                            ? _c(
+                                "v-btn",
+                                {
+                                  staticClass: "text-right",
+                                  attrs: { color: "red darken-1", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dataFormula.dialog = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                            cancelar\n                        "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-col",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "text-right",
+                              attrs: { color: "green darken-1", text: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.ejecutarAccionDialog()
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            aceptar\n                        "
+                              )
+                            ]
                           )
-                        ]
+                        ],
+                        1
                       )
                     ],
                     1
@@ -7225,7 +7448,12 @@ var render = function() {
             expression: "opcion == 'escala'"
           }
         ],
-        attrs: { productor: _vm.productor }
+        attrs: { productor: _vm.productor },
+        on: {
+          regresarPantalla: function($event) {
+            return _vm.regresarPantalla.apply(void 0, arguments)
+          }
+        }
       }),
       _vm._v(" "),
       _c("formula-component", {
@@ -7237,7 +7465,12 @@ var render = function() {
             expression: "opcion == 'formula'"
           }
         ],
-        attrs: { productor: _vm.productor, variables: _vm.variablesFormula }
+        attrs: { productor: _vm.productor, variables: _vm.variablesFormula },
+        on: {
+          regresarPantalla: function($event) {
+            return _vm.regresarPantalla.apply(void 0, arguments)
+          }
+        }
       }),
       _vm._v(" "),
       _c("evaluar-proveedores", {

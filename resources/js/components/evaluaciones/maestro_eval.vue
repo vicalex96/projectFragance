@@ -10,12 +10,14 @@
         <escala-component
             v-show="opcion == 'escala'"
             :productor="productor"
+            @regresarPantalla="regresarPantalla(...arguments)"
         ></escala-component>
 
         <formula-component
             v-show="opcion == 'formula'"
             :productor="productor"
             :variables="variablesFormula"
+            @regresarPantalla="regresarPantalla(...arguments)"
         ></formula-component>
 
         <evaluar-proveedores
@@ -42,7 +44,8 @@ export default {
             lista: [],
             productor: [],
             escalaView: false,
-            opcion: "menu"
+            opcion: "menu",
+            formulas: []
         };
     },
     mounted() {
@@ -73,6 +76,22 @@ export default {
                 this.variablesFormula = response.data;
             });
         },
+        obtenerFormulario() {
+            axios
+                .post(
+                    "/evaluaciones/formularios-vigentes",
+                    this.productor.id_productor
+                )
+                .then(response => {
+                    this.formulas = response.data;
+
+                });
+        },
+        regresarPantalla(pantalla) {
+            if (pantalla == "menu") {
+                this.opcion = pantalla;
+            }
+        }
     }
 };
 </script>
