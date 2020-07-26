@@ -60,15 +60,6 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item >
-        <v-list-item-action></v-list-item-action>
-
-        <v-list-item-content>
-          <v-list-item-title>ali_connors@example.com</v-list-item-title>
-          <v-list-item-subtitle>Work</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
       <v-divider inset></v-divider>
 
       <v-list-item >

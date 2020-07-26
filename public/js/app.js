@@ -3516,24 +3516,6 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c(
-            "v-list-item",
-            [
-              _c("v-list-item-action"),
-              _vm._v(" "),
-              _c(
-                "v-list-item-content",
-                [
-                  _c("v-list-item-title", [_vm._v("ali_connors@example.com")]),
-                  _vm._v(" "),
-                  _c("v-list-item-subtitle", [_vm._v("Work")])
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
           _c("v-divider", { attrs: { inset: "" } }),
           _vm._v(" "),
           _c(
