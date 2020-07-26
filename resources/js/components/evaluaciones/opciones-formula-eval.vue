@@ -1,17 +1,17 @@
 <template>
-    <v-container>
-        <v-row>
+    <v-container fluid>
+        <v-row justify="center">
             <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="8">
                 opciones de formulas y evaluaciones 
             </v-col>
         </v-row>
-        <v-row>
+        <v-row justify="center">
             <v-col class="blue lighten-2 white--text text-right " cols="8">
                 productor: -- {{productor.nombre}} --
             </v-col>
         </v-row>
         
-        <v-row>
+        <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                   Escalas
             </v-col>
@@ -25,7 +25,7 @@
                 </v-btn> 
             </v-col>
         </v-row>
-        <v-row>
+        <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                 formulas
             </v-col>
@@ -39,7 +39,7 @@
                 </v-btn> 
             </v-col>
         </v-row>
-        <v-row>
+        <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                 evaluar
             </v-col>
@@ -53,7 +53,7 @@
                 </v-btn> 
             </v-col>
         </v-row>
-        <v-row>
+        <v-row justify="center">
             <v-col class="blue lighten-2 white--text text-center pa-3" cols="8">
             </v-col>
         </v-row>
@@ -70,13 +70,13 @@ export default {
     },
     methods:{
         crearFormula(){
-            this.$emit('opcionFormula','formula')
+            this.$emit('opcionElegida','formula')
         },
         crearEscala(){
-            this.$emit('opcionFormula','escala')
+            this.$emit('opcionElegida','escala')
         },
         ejecutarEvaluacion(){
-            this.$emit('opcionEvaluacion','evaluacion')
+            this.$emit('opcionElegida','evaluacion')
         }
     },
     updated(){
