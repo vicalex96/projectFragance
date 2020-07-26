@@ -3406,53 +3406,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-card",
-    { staticClass: "mx-auto", attrs: { "max-width": "375" } },
+    { staticClass: "mx-auto", attrs: { "max-width": "375", color: "primary" } },
     [
       _c(
         "v-img",
-        {
-          attrs: {
-            src: "https://cdn.vuetifyjs.com/images/lists/ali.png",
-            height: "300px",
-            dark: ""
-          }
-        },
+        { attrs: { src: "BASFLOGO.png", height: "200px", dark: "" } },
         [
           _c(
             "v-row",
             { staticClass: "fill-height" },
             [
-              _c(
-                "v-card-title",
-                [
-                  _c(
-                    "v-btn",
-                    { attrs: { dark: "", icon: "" } },
-                    [_c("v-icon", [_vm._v("mdi-chevron-left")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    { staticClass: "mr-4", attrs: { dark: "", icon: "" } },
-                    [_c("v-icon", [_vm._v("mdi-pencil")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    { attrs: { dark: "", icon: "" } },
-                    [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("v-spacer"),
-              _vm._v(" "),
               _c("v-card-title", { staticClass: "white--text pl-12 pt-12" }, [
                 _c("div", { staticClass: "display-1 pl-12 pt-12" }, [
                   _vm._v("Ali Conners")
