@@ -1,11 +1,11 @@
 <template>
-<v-container>
-    <v-row>
+<v-container fluid>
+    <v-row justify="center">
         <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="8">
           elegir {{tipo}}
         </v-col>
     </v-row>
-    <v-row v-for="(element) in lista" :key="element[0]">
+    <v-row justify="center" v-for="(element) in lista" :key="element[0]">
         <v-col class="blue lighten-5" cols="1" >
             <v-list-item-avatar >
                 <v-avatar
@@ -42,7 +42,7 @@
               </v-list-item-action>
         </v-col>
     </v-row>  
-    <v-row>
+    <v-row justify="center">
         <v-col class="blue lighten-2 white--text text-center pa-3"  cols="8">
         </v-col>
     </v-row>        

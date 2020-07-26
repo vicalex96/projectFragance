@@ -40,6 +40,35 @@ class evaluacionController extends Controller
         ");
     }
 
+    public function obtenerVariables() {
+        return DB::select("select * from vam_variable");
+    }
 
-    
+    public function crearFormula(Request $request){
+        $params = json_decode($request->criterios, true);
+        return DB::transaction(function(){
+            foreach($params as $criterios => $id_variable) 
+            {
+                DB::insert("insert into 
+                vam_evaluacion_criterio(id_productor,id_variable,fecha_inicio,peso,tipopor) 
+                values('$request->id_productor',
+                '$criterio->id_variable',
+                current_date,
+                $criterio->peso,$request->tipoEval)");
+            }
+        });
+    }
+    public function crearEscala(Request $request){
+
+        $ultimaEscala = DB::table('vam_escala_valorada')->orderBy('id_escala','DESC')->first();
+        $id_productor = $request->id_productor;
+        $id_escala_v = $ultimaEscala->id_escala;
+        ++$id_escala_v;
+        $r_inicio = $request->rango_inicio;
+        $r_final = $request->rango_final;
+        return DB::insert("insert into vam_escala_valorada(id_productor, id_escala,fecha_inicio,rango_inicio,rango_fin) 
+        values('$id_productor','$id_escala_v',current_date,'$r_inicio','$r_final');");
+    }
+
+
 }

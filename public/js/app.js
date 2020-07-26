@@ -2498,138 +2498,180 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data(vm) {
+  props: ["productor"],
+  data: function data() {
     return {
-      fecha: new Date().toISOString().substr(0, 10),
-      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-      menu1: false,
-      deactive: true,
-      valid: false,
       reglasDePeso: [function (v) {
-        return !!v || 'el peso es requerido';
+        return !!v || "la escala es requerida";
       }, function (v) {
-        return v && parseInt(v) <= 100 || 'el peso supera el 100% o es texto';
-      }]
+        return v && parseInt(v) <= 10000 || "no es recomendable una escala tan alta";
+      }, function (v) {
+        return /^[0-9]{0,9}$/.test(v) || "solo numeros";
+      }],
+      dataEscala: {
+        mensaje: "",
+        descripcion: "",
+        inicio: 0,
+        "final": 0,
+        valid: false,
+        dialog: false,
+        status: 0
+      },
+      escalat: ''
     };
   },
-  computed: {
-    computedDateFormatted: function computedDateFormatted() {
-      return this.formatDate(this.fecha);
-    }
-  },
-  watch: {
-    fecha: function fecha(val) {
-      this.dateFormatted = this.formatDate(this.fecha);
-    }
-  },
+  computed: {},
+  watch: {},
   methods: {
-    formatDate: function formatDate(fecha) {
-      if (!fecha) return null;
+    crearEscala: function crearEscala() {
+      var resultado = this.comprobarData();
 
-      var _fecha$split = fecha.split('-'),
-          _fecha$split2 = _slicedToArray(_fecha$split, 3),
-          anio = _fecha$split2[0],
-          mes = _fecha$split2[1],
-          dia = _fecha$split2[2];
+      switch (resultado) {
+        case 1:
+          this.guardarEscala();
+          break;
 
-      return "".concat(dia, "-").concat(mes, "-").concat(anio);
+        case -1:
+          this.dataEscala.mensaje = "-Error: el campo inicial es mayor-";
+          this.dataEscala.descripcion = "el valor de inicio debe ser menor al valor final de la escala";
+          this.dataEscala.status = -1;
+          this.dataEscala.dialog = true;
+          break;
+      }
     },
-    validate: function validate() {}
+    comprobarData: function comprobarData() {
+      if (this.dataEscala.inicio >= this.dataEscala["final"]) {
+        return -1;
+      }
+
+      return 1;
+    },
+    guardarEscala: function guardarEscala() {
+      var _this = this;
+
+      this.dataEscala.dialog = false;
+      var escala = {
+        id_productor: this.productor.id_productor,
+        rango_inicio: this.dataEscala.inicio,
+        rango_final: this.dataEscala["final"]
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/evaluaciones/crear-escala", escala).then(function (response) {
+        _this.escalat = response.data;
+        console.log(_this.escalat);
+        _this.dataEscala.mensaje = "Escala creada correctamente";
+        _this.dataEscala.descripcion = "informacion guardada";
+        _this.dataEscala.dialog = true;
+        _this.dataEscala.status = 1;
+      })["catch"](function (error) {
+        _this.dataEscala.mensaje = "-Error: no fue posible guardar los datos";
+        _this.dataEscala.descripcion = "hubo un error al tratar de guardar los datos";
+        _this.dataEscala.status = -2;
+        _this.dataEscala.dialog = true;
+      });
+    }
   }
 });
 
@@ -2831,6 +2873,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2940,71 +2984,118 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["productor", "variables"],
   data: function data() {
     return {
-      tipoEval: 'inicial',
-      criterios: [{
-        nro: 0,
-        id: 0,
-        descripcion: '',
-        peso: '',
-        select: null
-      }, {
-        nro: 1,
-        id: 1,
-        descripcion: '',
-        peso: '',
-        select: null
-      }],
+      tipoEval: "inicial",
+      criterios: [],
       reglasDePeso: [function (v) {
-        return !!v || 'el peso es requerido';
+        return !!v || "el peso es requerido";
       }, function (v) {
-        return /^[0-9]{0,3}$/.test(v) || 'solo numeros';
+        return /^[0-9]{0,3}$/.test(v) || "solo numeros";
       }, function (v) {
-        return v && parseInt(v) <= 100 || 'el peso supera el 100% o es texto';
+        return v && parseInt(v) <= 100 || "el peso supera el 100% o es texto";
       }],
-      items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-      valid: true
+      reglasDelista: [function (v) {
+        return !!v || "criterio es necesario";
+      }],
+      pesoExito: "",
+      dataFormula: {
+        mensaje: "",
+        descripcion: "",
+        dialog: false,
+        valid: false,
+        status: 0
+      },
+      formulasPrevias: ''
     };
   },
+  computed: {
+    varaiblesFiltradas: function varaiblesFiltradas() {
+      var objeto = [];
+      var vari = "";
 
-  /*   data: () => ({
-     criterios:[{
-       nro: 0,
-       id: 0,
-       descripcion:'',
-       peso: '',
-       select: null,
-     },
-     {
-       nro: 1,
-       id: 1,
-       descripcion:'',
-       peso: 0,
-       select:null,
-     }],
-  
-  
-     pesoExito:'',
-     reglasDePeso: [
-       v => !!v || 'el peso es requerido', 
-       v => (v && parseInt(v)<=100) || 'el peso supera el 100% o es texto',
-     ],
-     select: null,
-     items: [
-       'Item 1',
-       'Item 2',
-       'Item 3',
-       'Item 4',
-     ],
-     disabled:true,
-     contador: 0,
-     e:0,
-     tipoEval:'inicial',
-  
-  
-   }),*/
+      for (vari in this.variables) {
+        if (this.variables[vari].nombre.toLowerCase().indexOf("exito") == -1) {
+          objeto.push(this.variables[vari]);
+        }
+      }
+
+      return objeto;
+    },
+    buscarCriterioExito: function buscarCriterioExito() {
+      var objeto = [];
+      var vari = "";
+
+      for (vari in this.variables) {
+        if (this.variables[vari].nombre.toLowerCase().indexOf("exito") >= 0) {
+          return this.variables[vari];
+        }
+      }
+    },
+    revisarFormulasExistentes: function revisarFormulasExistentes() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/evaluaciones/formulas', this.productor).then(function (response) {
+        _this.variablesFormula = response.data;
+      });
+    }
+  },
   methods: {
     validate: function validate() {
       this.$refs.form.validate();
@@ -3017,10 +3108,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     agregarCriterio: function agregarCriterio() {
       var criterio = {
-        nro: this.criterios.length,
         id: this.criterios.length,
-        descripcion: '',
         peso: 0
+      };
+      this.criterios.push(criterio);
+    },
+    guardarCriterioExito: function guardarCriterioExito(value) {
+      var criterio = {
+        id: this.criterios.length,
+        id_variable: this.buscarCriterioExito.id_variable,
+        peso: value
       };
       this.criterios.push(criterio);
     },
@@ -3029,18 +3126,133 @@ __webpack_require__.r(__webpack_exports__);
       this.contador = 0;
 
       for (this.e in this.criterios) {
-        this.criterios[this.contador].nro = this.contador;
+        this.criterios[this.contador].id = this.contador;
         this.contador++;
       }
     },
     elegirTipoEval: function elegirTipoEval() {
       alert(value);
 
-      if (this.tipoEval == 'inicial') {
-        this.tipoEval = 'renovacion';
+      if (this.tipoEval == "inicial") {
+        this.tipoEval = "renovacion";
       } else {
-        this.tipoEval = 'inicial';
+        this.tipoEval = "inicial";
       }
+    },
+    crearFormula: function crearFormula() {
+      var resultado = this.comprobarData();
+
+      switch (resultado) {
+        case 1:
+          this.dataFormula.mensaje = "La formula se ha creado correctamente";
+          this.dataFormula.descripcion = "todos los datos se han guardado";
+          this.dataFormula.status = 1;
+          break;
+
+        default:
+          this.eliminarCriterio(this.criterios.length - 1);
+
+        case -1:
+          var falta = 3 - this.criterios.length;
+          this.dataFormula.mensaje = "-Error:faltan criterios-";
+          this.dataFormula.descripcion = "las formulas para evaluaciones iniciales requieren 3 " + "criterios como minimo, sin incluir criterio de exito, falta " + falta + " criterios por agregar";
+          this.dataFormula.status = -1;
+          break;
+
+        case -2:
+          falta = 1 - this.criterios.length;
+          this.dataFormula.mensaje = "- Error: faltan criterios -";
+          this.dataFormula.descripcion = "las formulas para renovaciones requieren 1 " + "criterios como minimo, sin incluir criterio de exito, falta " + falta + " criterios por agregar";
+          this.dataFormula.status = -2;
+          break;
+
+        case -3:
+          this.dataFormula.mensaje = "-Error: falta rellenar el criterio de exito -";
+          this.dataFormula.descripcion = "este criterio permite saber la nota minima para pasar la evalucion";
+          this.dataFormula.status = -3;
+          break;
+
+        case -4:
+          this.dataFormula.mensaje = "- Error: criterios repetidos -";
+          this.dataFormula.descripcion = "no deben repetirse los criterios";
+          this.dataFormula.status = -4;
+          break;
+
+        case -5:
+          this.dataFormula.mensaje = "- Error: el peso total excede el 100% -";
+          this.dataFormula.descripcion = "la suma de los pesos de criterios, sin contar el de exito, deben dar 100%";
+          this.dataFormula.status = -5;
+          break;
+
+        case -6:
+          this.dataFormula.mensaje = "- Error:el peso total no alcansa el 100% -";
+          this.dataFormula.descripcion = "la suma de los pesos de criterios, sin contar el de exito, deben dar 100%";
+          this.dataFormula.status = -6;
+          break;
+
+        case -7:
+          this.dataFormula.mensaje = "- Error:falta el criterio de exito -";
+          this.dataFormula.descripcion = "es necesario indicar el criterio de exito";
+          this.dataFormula.status = -7;
+          break;
+      }
+
+      this.dataFormula.dialog = true;
+    },
+    comprobarData: function comprobarData() {
+      var id = "";
+      var pesoTotal = 0;
+
+      if (this.tipoEval == "inicial" && this.criterios.length < 3) {
+        return -1;
+      }
+
+      if (this.tipoEval == "renovacion" && this.criterios.length < 1) {
+        return -2;
+      }
+
+      pesoTotal = 0;
+
+      for (id in this.criterios) {
+        if (this.criterios[id].peso <= 0) return -3;
+
+        if (id <= this.criterios.length - 1) {
+          pesoTotal = pesoTotal + parseInt(this.criterios[id].peso);
+        }
+
+        var id2 = 0;
+
+        for (id2 in this.criterios) {
+          if (this.criterios[id].id_variable == this.criterios[id2].id_variable && id != id2) {
+            return -4;
+          }
+        }
+      }
+
+      if (pesoTotal > 100) return -5;
+      if (pesoTotal < 100) return -6;
+
+      if (this.pesoExito <= 0 || this.pesoExito > 100) {
+        return -7;
+      }
+
+      return 1;
+    },
+    guardarFormula: function guardarFormula() {
+      this.guardarCriterioExito(this.pesoExito);
+      var formula = {
+        criterios: this.criterios,
+        tipoEval: this.tipoEval,
+        id_productor: this.productor.id_productor
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/evaluaciones/crear-formula', formula).then(function (response) {
+        console.log(response.data);
+      });
+      this.dataFormula.dialog = false;
+      this.$emit('regresarAtras', true);
+    },
+    cancelarFormula: function cancelarFormula() {
+      this.$emit('regresarAtras', false);
     }
   }
 });
@@ -3092,35 +3304,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      tipo: 'productores',
+      variablesFormula: [],
+      tipo: "productores",
       lista: [],
       productor: [],
       escalaView: false,
-      opcion: 'menu'
+      opcion: "menu"
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/productores').then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/productores").then(function (response) {
       _this.lista = response.data;
     });
   },
   methods: {
     elegirOpcion: function elegirOpcion(opcion) {
       this.opcion = opcion;
+
+      if (opcion == "formula") {
+        this.obtenerVariables();
+      }
     },
     agregarComentario: function agregarComentario(comentario) {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/familia').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/familia").then(function (response) {
         _this2.lista = response.data;
       });
     },
@@ -3129,6 +3343,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     selecionarProveedor: function selecionarProveedor(elemento) {
       this.productor = elemento;
+    },
+    obtenerVariables: function obtenerVariables() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/evaluaciones/variables").then(function (response) {
+        _this3.variablesFormula = response.data;
+      });
     }
   }
 });
@@ -3213,13 +3434,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     crearFormula: function crearFormula() {
-      this.$emit('opcionFormula', 'formula');
+      this.$emit('opcionElegida', 'formula');
     },
     crearEscala: function crearEscala() {
-      this.$emit('opcionFormula', 'escala');
+      this.$emit('opcionElegida', 'escala');
     },
     ejecutarEvaluacion: function ejecutarEvaluacion() {
-      this.$emit('opcionEvaluacion', 'evaluacion');
+      this.$emit('opcionElegida', 'evaluacion');
     }
   },
   updated: function updated() {
@@ -5883,23 +6104,25 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-form",
-    {
-      model: {
-        value: _vm.valid,
-        callback: function($$v) {
-          _vm.valid = $$v
-        },
-        expression: "valid"
-      }
-    },
+    "v-container",
+    { attrs: { fluid: "" } },
     [
       _c(
-        "v-container",
-        { staticClass: " offset-2" },
+        "v-form",
+        {
+          ref: "form",
+          model: {
+            value: _vm.dataEscala.valid,
+            callback: function($$v) {
+              _vm.$set(_vm.dataEscala, "valid", $$v)
+            },
+            expression: "dataEscala.valid"
+          }
+        },
         [
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c(
                 "v-col",
@@ -5908,7 +6131,7 @@ var render = function() {
                     "blue lighten-2 white--text text-center display-1 pa-3",
                   attrs: { cols: "8" }
                 },
-                [_vm._v("\n               creador escala\n       ")]
+                [_vm._v("\n                creador escala\n            ")]
               )
             ],
             1
@@ -5916,114 +6139,21 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c(
                 "v-col",
                 {
-                  staticClass: "blue darken-2 white--text text-right pa-5",
-                  attrs: { cols: "2" }
+                  staticClass: "blue lighten-2 white--text text-left ",
+                  attrs: { cols: "8" }
                 },
                 [
                   _vm._v(
-                    "\n               fecha de vencimiento\n               "
-                  ),
-                  _c("p", [_vm._v("(opcional)")])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-col",
-                { staticClass: "blue lighten-5", attrs: { cols: "4" } },
-                [
-                  _c(
-                    "v-menu",
-                    {
-                      ref: "menu1",
-                      attrs: {
-                        "close-on-content-click": false,
-                        "offset-y": "",
-                        "max-width": "200px",
-                        "min-width": "300px"
-                      },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "activator",
-                          fn: function(ref) {
-                            var on = ref.on
-                            var attrs = ref.attrs
-                            return [
-                              _c(
-                                "v-text-field",
-                                _vm._g(
-                                  _vm._b(
-                                    {
-                                      attrs: {
-                                        label: "fecha",
-                                        hint: "formato MM/DD/YYYY",
-                                        "persistent-hint": "",
-                                        "prepend-icon": "event"
-                                      },
-                                      model: {
-                                        value: _vm.dateFormatted,
-                                        callback: function($$v) {
-                                          _vm.dateFormatted = $$v
-                                        },
-                                        expression: "dateFormatted"
-                                      }
-                                    },
-                                    "v-text-field",
-                                    attrs,
-                                    false
-                                  ),
-                                  on
-                                )
-                              )
-                            ]
-                          }
-                        }
-                      ]),
-                      model: {
-                        value: _vm.menu1,
-                        callback: function($$v) {
-                          _vm.menu1 = $$v
-                        },
-                        expression: "menu1"
-                      }
-                    },
-                    [
-                      _vm._v(" "),
-                      _c("v-date-picker", {
-                        attrs: { "no-title": "" },
-                        on: {
-                          input: function($event) {
-                            _vm.menu1 = false
-                          }
-                        },
-                        model: {
-                          value: _vm.fecha,
-                          callback: function($$v) {
-                            _vm.fecha = $$v
-                          },
-                          expression: "fecha"
-                        }
-                      })
-                    ],
-                    1
+                    "\n                productor: --" +
+                      _vm._s(_vm.productor.nombre) +
+                      "--\n            "
                   )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "v-col",
-                { staticClass: "blue lighten-5", attrs: { cols: "2" } },
-                [
-                  _c("v-switch", {
-                    staticClass: "mx-2",
-                    attrs: { label: "sin vencimiento" }
-                  })
-                ],
-                1
+                ]
               )
             ],
             1
@@ -6031,6 +6161,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c(
                 "v-col",
@@ -6038,7 +6169,7 @@ var render = function() {
                   staticClass: "blue darken-2 white--text text-right pa-7",
                   attrs: { cols: "2" }
                 },
-                [_vm._v("\n               Rango de la escala\n       ")]
+                [_vm._v("\n                Rango de la escala\n            ")]
               ),
               _vm._v(" "),
               _c(
@@ -6050,6 +6181,13 @@ var render = function() {
                       rules: _vm.reglasDePeso,
                       label: "inicio",
                       required: ""
+                    },
+                    model: {
+                      value: _vm.dataEscala.inicio,
+                      callback: function($$v) {
+                        _vm.$set(_vm.dataEscala, "inicio", $$v)
+                      },
+                      expression: "dataEscala.inicio"
                     }
                   })
                 ],
@@ -6062,7 +6200,7 @@ var render = function() {
                   staticClass: "blue lighten-5 text-center display-2",
                   attrs: { cols: "1" }
                 },
-                [_vm._v("\n         -\n       ")]
+                [_vm._v("\n                -\n            ")]
               ),
               _vm._v(" "),
               _c(
@@ -6074,6 +6212,13 @@ var render = function() {
                       rules: _vm.reglasDePeso,
                       label: "fin",
                       required: ""
+                    },
+                    model: {
+                      value: _vm.dataEscala.final,
+                      callback: function($$v) {
+                        _vm.$set(_vm.dataEscala, "final", $$v)
+                      },
+                      expression: "dataEscala.final"
                     }
                   })
                 ],
@@ -6090,6 +6235,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c("v-col", {
                 staticClass: "blue darken-2 white--text text-right pa-5",
@@ -6098,16 +6244,99 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-col",
-                { staticClass: "blue lighten-4", attrs: { cols: "6" } },
+                {
+                  staticClass: "blue lighten-3 text-right",
+                  attrs: { cols: "6" }
+                },
                 [
                   _c(
                     "v-btn",
                     {
                       staticClass: "mr-4",
-                      attrs: { disabled: _vm.valid, color: "success" },
-                      on: { click: _vm.validate }
+                      attrs: {
+                        disabled: !_vm.dataEscala.valid,
+                        color: "success"
+                      },
+                      on: { click: _vm.crearEscala }
                     },
-                    [_vm._v("\n           crear escala\n           ")]
+                    [
+                      _vm._v(
+                        "\n                    crear formula\n                "
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "400" },
+              model: {
+                value: _vm.dataEscala.dialog,
+                callback: function($$v) {
+                  _vm.$set(_vm.dataEscala, "dialog", $$v)
+                },
+                expression: "dataEscala.dialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v(_vm._s(_vm.dataEscala.mensaje))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.dataEscala.descripcion) +
+                          "\n                    "
+                      ),
+                      _vm.dataEscala.status == 1
+                        ? _c(
+                            "v-icon",
+                            {
+                              staticClass: "pa-3",
+                              attrs: { color: "green", dark: "", large: "" }
+                            },
+                            [_vm._v("mdi-thumb-up")]
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dataEscala.dialog = false
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        aceptar\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
@@ -6557,13 +6786,25 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-form",
+    "v-container",
+    { attrs: { fluid: "" } },
     [
       _c(
-        "v-container",
+        "v-form",
+        {
+          ref: "form",
+          model: {
+            value: _vm.dataFormula.valid,
+            callback: function($$v) {
+              _vm.$set(_vm.dataFormula, "valid", $$v)
+            },
+            expression: "dataFormula.valid"
+          }
+        },
         [
           _c(
             "v-row",
+            { staticClass: "justify-center" },
             [
               _c(
                 "v-col",
@@ -6572,7 +6813,7 @@ var render = function() {
                     "blue lighten-2 white--text text-center display-2 pa-3",
                   attrs: { cols: "12" }
                 },
-                [_vm._v("\n            creador de evaluaciones\n      ")]
+                [_vm._v("\n                creacion de formulas\n            ")]
               )
             ],
             1
@@ -6587,14 +6828,13 @@ var render = function() {
                   staticClass: "blue darken-2 text-right white--text pa-5",
                   attrs: { cols: "2" }
                 },
-                [_vm._v("\n            tipo de evaluacion   \n        ")]
+                [_vm._v("\n                tipo de formula\n            ")]
               ),
               _vm._v(" "),
-              _c(
-                "v-col",
-                { staticClass: "blue lighten-5", attrs: { cols: "1" } },
-                [_vm._v(" " + _vm._s(_vm.tipoEval) + " ")]
-              ),
+              _c("v-col", {
+                staticClass: "blue lighten-5",
+                attrs: { cols: "1" }
+              }),
               _vm._v(" "),
               _c(
                 "v-col",
@@ -6603,12 +6843,14 @@ var render = function() {
                   _c(
                     "v-radio-group",
                     {
-                      attrs: {
-                        "v-model": _vm.tipoEval,
-                        mandatory: true,
-                        row: ""
-                      },
-                      on: { click: _vm.elegirTipoEval }
+                      attrs: { row: "" },
+                      model: {
+                        value: _vm.tipoEval,
+                        callback: function($$v) {
+                          _vm.tipoEval = $$v
+                        },
+                        expression: "tipoEval"
+                      }
                     },
                     [
                       _c("v-radio", {
@@ -6637,42 +6879,33 @@ var render = function() {
                   staticClass: "blue darken-2 white--text text-right pa-5",
                   attrs: { cols: "2" }
                 },
-                [_vm._v("\n              criterios\n      ")]
+                [_vm._v("\n                agregar criterio\n            ")]
               ),
               _vm._v(" "),
               _c(
                 "v-col",
                 {
-                  staticClass: "blue lighten-4 text-center pa-5",
-                  attrs: { cols: "2" }
-                },
-                [_vm._v("\n          agregar criterio\n     ")]
-              ),
-              _vm._v(" "),
-              _c(
-                "v-col",
-                {
-                  staticClass: "blue lighten-4 white--text text-right pa-3",
-                  attrs: { cols: "1" }
+                  staticClass: "blue lighten-4 white--text text-left pa-3",
+                  attrs: { align: "center", cols: "10" }
                 },
                 [
                   _c(
                     "v-btn",
                     {
-                      staticClass: "mr-4",
-                      attrs: { color: "success" },
+                      staticClass: "mx-2",
+                      attrs: { color: "success", dark: "" },
                       on: { click: _vm.agregarCriterio }
                     },
-                    [_vm._v("\n            +\n            ")]
+                    [
+                      _c("v-icon", { attrs: { dark: "" } }, [
+                        _vm._v("mdi-plus")
+                      ])
+                    ],
+                    1
                   )
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c("v-col", {
-                staticClass: "blue lighten-4 white--text text-right pa-3",
-                attrs: { cols: "7" }
-              })
+              )
             ],
             1
           ),
@@ -6680,7 +6913,7 @@ var render = function() {
           _vm._l(_vm.criterios, function(criterio) {
             return _c(
               "v-row",
-              { key: criterio.nro },
+              { key: criterio.id },
               [
                 _c(
                   "v-col",
@@ -6690,34 +6923,32 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n              criterio: " +
-                        _vm._s(criterio.nro) +
-                        "\n      "
+                      "\n                criterio: " +
+                        _vm._s(criterio.id) +
+                        "\n            "
                     )
                   ]
                 ),
                 _vm._v(" "),
                 _c(
                   "v-col",
-                  { staticClass: "blue lighten-5", attrs: { cols: "7" } },
+                  { staticClass: "blue lighten-5", attrs: { cols: "6" } },
                   [
                     _c("v-select", {
                       attrs: {
-                        items: _vm.items,
-                        rules: [
-                          function(v) {
-                            return !!v || "criterio es necesario"
-                          }
-                        ],
+                        items: _vm.varaiblesFiltradas,
+                        "item-value": "id_variable",
+                        "item-text": "nombre",
+                        rules: _vm.reglasDelista,
                         label: "elige criterio",
                         required: ""
                       },
                       model: {
-                        value: criterio.select,
+                        value: criterio.id_variable,
                         callback: function($$v) {
-                          _vm.$set(criterio, "select", $$v)
+                          _vm.$set(criterio, "id_variable", $$v)
                         },
-                        expression: "criterio.select"
+                        expression: "criterio.id_variable"
                       }
                     })
                   ],
@@ -6726,44 +6957,56 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "v-col",
-                  { staticClass: "blue lighten-5", attrs: { cols: "2" } },
+                  { staticClass: "blue lighten-5", attrs: { cols: "3" } },
                   [
-                    _c("v-text-field", {
-                      attrs: {
-                        maxlength: 3,
-                        rules: _vm.reglasDePeso,
-                        label: "peso",
-                        suffix: "%",
-                        required: ""
-                      },
-                      model: {
-                        value: criterio.peso,
-                        callback: function($$v) {
-                          _vm.$set(criterio, "peso", $$v)
+                    _c(
+                      "v-text-field",
+                      {
+                        attrs: {
+                          maxlength: 3,
+                          rules: _vm.reglasDePeso,
+                          label: "peso",
+                          suffix: "%",
+                          required: ""
                         },
-                        expression: "criterio.peso"
-                      }
-                    })
+                        model: {
+                          value: criterio.peso,
+                          callback: function($$v) {
+                            _vm.$set(criterio, "peso", $$v)
+                          },
+                          expression: "criterio.peso"
+                        }
+                      },
+                      [_vm._v("0")]
+                    )
                   ],
                   1
                 ),
                 _vm._v(" "),
                 _c(
                   "v-col",
-                  { staticClass: "blue lighten-3", attrs: { cols: "1" } },
+                  {
+                    staticClass: "blue lighten-3 text-center ",
+                    attrs: { cols: "1" }
+                  },
                   [
                     _c(
                       "v-btn",
                       {
-                        staticClass: "mr-4",
-                        attrs: { color: "error" },
+                        staticClass: "mx-2",
+                        attrs: { color: "error", dark: "", small: "" },
                         on: {
                           click: function($event) {
-                            return _vm.eliminarCriterio(criterio.nro)
+                            return _vm.eliminarCriterio(criterio.id)
                           }
                         }
                       },
-                      [_vm._v("\n            -\n         ")]
+                      [
+                        _c("v-icon", { attrs: { dark: "" } }, [
+                          _vm._v("mdi-minus")
+                        ])
+                      ],
+                      1
                     )
                   ],
                   1
@@ -6773,53 +7016,49 @@ var render = function() {
             )
           }),
           _vm._v(" "),
-          _vm.tipoEval == "renovacion"
-            ? _c(
-                "v-row",
+          _c(
+            "v-row",
+            [
+              _c(
+                "v-col",
+                {
+                  staticClass: "blue darken-2 text-right white--text pa-7",
+                  attrs: { cols: "2" }
+                },
+                [_vm._v("\n                criterio exito\n            ")]
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { staticClass: "blue lighten-4", attrs: { cols: "2" } },
                 [
-                  _c(
-                    "v-col",
-                    {
-                      staticClass: "blue darken-2 text-right white--text pa-7",
-                      attrs: { cols: "2" }
+                  _c("v-text-field", {
+                    attrs: {
+                      counter: 3,
+                      rules: _vm.reglasDePeso,
+                      label: "peso",
+                      suffix: "%",
+                      required: ""
                     },
-                    [_vm._v("\n        criterio exito \n      ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { staticClass: "blue lighten-4", attrs: { cols: "2" } },
-                    [
-                      _c("v-text-field", {
-                        attrs: {
-                          counter: 3,
-                          rules: _vm.reglasDePeso,
-                          label: "peso",
-                          suffix: "%",
-                          required: ""
-                        },
-                        model: {
-                          value: _vm.pesoExito,
-                          callback: function($$v) {
-                            _vm.pesoExito = $$v
-                          },
-                          expression: "pesoExito"
-                        }
-                      })
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-col",
-                    { staticClass: "blue lighten-4", attrs: { cols: "8" } },
-                    [_c("checkbox")],
-                    1
-                  )
+                    model: {
+                      value: _vm.pesoExito,
+                      callback: function($$v) {
+                        _vm.pesoExito = $$v
+                      },
+                      expression: "pesoExito"
+                    }
+                  })
                 ],
                 1
-              )
-            : _vm._e(),
+              ),
+              _vm._v(" "),
+              _c("v-col", {
+                staticClass: "blue lighten-4",
+                attrs: { cols: "8" }
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
           _c(
             "v-row",
@@ -6831,16 +7070,95 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-col",
-                { staticClass: "blue lighten-3", attrs: { cols: "10" } },
+                {
+                  staticClass: "blue lighten-3 text-right",
+                  attrs: { cols: "10" }
+                },
                 [
                   _c(
                     "v-btn",
                     {
                       staticClass: "mr-4",
-                      attrs: { disabled: !_vm.valid, color: "success" },
-                      on: { click: _vm.validate }
+                      attrs: {
+                        disabled: !_vm.dataFormula.valid,
+                        color: "success"
+                      },
+                      on: { click: _vm.crearFormula }
                     },
-                    [_vm._v("\n          crear evaluacion\n          ")]
+                    [
+                      _vm._v(
+                        "\n                    crear formula\n                "
+                      )
+                    ]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-dialog",
+            {
+              attrs: { "max-width": "400" },
+              model: {
+                value: _vm.dataFormula.dialog,
+                callback: function($$v) {
+                  _vm.$set(_vm.dataFormula, "dialog", $$v)
+                },
+                expression: "dataFormula.dialog"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", { staticClass: "headline" }, [
+                    _vm._v(_vm._s(_vm.dataFormula.mensaje))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.dataFormula.descripcion) +
+                          "\n                    "
+                      ),
+                      _vm.dataFormula.status == 1
+                        ? _c(
+                            "v-icon",
+                            {
+                              staticClass: "pa-3",
+                              attrs: { color: "green", dark: "", large: "" }
+                            },
+                            [_vm._v("mdi-thumb-up")]
+                          )
+                        : _vm._e()
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "green darken-1", text: "" },
+                          on: { click: _vm.guardarFormula }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        aceptar\n                    "
+                          )
+                        ]
+                      )
+                    ],
+                    1
                   )
                 ],
                 1
@@ -6878,7 +7196,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-row",
+    "v-container",
+    { attrs: { fluid: "" } },
     [
       _c("opciones-formula-component", {
         directives: [
@@ -6886,16 +7205,12 @@ var render = function() {
             name: "show",
             rawName: "v-show",
             value: _vm.productor.length != 0 && _vm.opcion == "menu",
-            expression: " productor.length != 0 &&  opcion == 'menu' "
+            expression: "productor.length != 0 && opcion == 'menu'"
           }
         ],
-        staticClass: "offset-3",
         attrs: { productor: _vm.productor },
         on: {
-          opcionFormula: function($event) {
-            return _vm.elegirOpcion.apply(void 0, arguments)
-          },
-          opcionEvaluacion: function($event) {
+          opcionElegida: function($event) {
             return _vm.elegirOpcion.apply(void 0, arguments)
           }
         }
@@ -6922,7 +7237,7 @@ var render = function() {
             expression: "opcion == 'formula'"
           }
         ],
-        attrs: { productor: _vm.productor }
+        attrs: { productor: _vm.productor, variables: _vm.variablesFormula }
       }),
       _vm._v(" "),
       _c("evaluar-proveedores", {
@@ -6946,7 +7261,6 @@ var render = function() {
             expression: "productor.length == 0"
           }
         ],
-        staticClass: "offset-4",
         attrs: { lista: _vm.lista, tipo: _vm.tipo },
         on: {
           elementSelect: function($event) {
@@ -6982,9 +7296,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-container",
+    { attrs: { fluid: "" } },
     [
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7005,6 +7321,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7026,6 +7343,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7058,6 +7376,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7090,6 +7409,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7122,6 +7442,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c("v-col", {
             staticClass: "blue lighten-2 white--text text-center pa-3",
@@ -7266,9 +7587,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-container",
+    { attrs: { fluid: "" } },
     [
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c(
             "v-col",
@@ -7290,7 +7613,7 @@ var render = function() {
       _vm._l(_vm.lista, function(element) {
         return _c(
           "v-row",
-          { key: element[0] },
+          { key: element[0], attrs: { justify: "center" } },
           [
             _c(
               "v-col",
@@ -7379,6 +7702,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "v-row",
+        { attrs: { justify: "center" } },
         [
           _c("v-col", {
             staticClass: "blue lighten-2 white--text text-center pa-3",
