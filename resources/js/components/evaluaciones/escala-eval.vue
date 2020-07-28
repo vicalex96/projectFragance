@@ -10,11 +10,8 @@
                 </v-col>
             </v-row>
             <v-row class="justify-center">
-                <v-col
-                    class="blue lighten-2 white--text text-left "
-                    cols="8"
-                >
-                    productor: --{{productor.nombre}}--
+                <v-col class="blue lighten-2 white--text text-left " cols="8">
+                    productor: --{{ productor.nombre }}--
                 </v-col>
             </v-row>
             <v-row class="justify-center">
@@ -52,13 +49,9 @@
                 >
                 </v-col>
                 <v-col class="blue lighten-3 text-left" cols="4">
-                    <v-btn
-                        color="error"
-                        class="mr-4"
-                        @click="cancelarEscala"
-                    >
+                    <v-btn color="error" class="mr-4" @click="cancelarEscala">
                         cancelar
-                    </v-btn>  
+                    </v-btn>
                 </v-col>
                 <v-col class="blue lighten-3 text-right" cols="2">
                     <v-btn
@@ -97,7 +90,10 @@
                                 class="text-right"
                                 color="red darken-1"
                                 v-if="dataEscala.cancelar == true"
-                                @click="dataEscala.dialog = false; dataEscala.cancelar = false"
+                                @click="
+                                    dataEscala.dialog = false;
+                                    dataEscala.cancelar = false;
+                                "
                                 text
                             >
                                 cancelar
@@ -105,15 +101,15 @@
                         </v-col>
 
                         <v-col>
-                        <v-btn
-                            class="text-right"
-                            color="green darken-1"
-                            text
-                            @click="ejecutarAccionDialog()"
-                        >
-                            aceptar
-                        </v-btn>
-                        </v-col> 
+                            <v-btn
+                                class="text-right"
+                                color="green darken-1"
+                                text
+                                @click="ejecutarAccionDialog()"
+                            >
+                                aceptar
+                            </v-btn>
+                        </v-col>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -137,13 +133,13 @@ export default {
             dataEscala: {
                 mensaje: "",
                 descripcion: "",
-                inicio: '',
-                final: '',
+                inicio: "",
+                final: "",
                 valid: false,
                 dialog: false,
                 status: 0,
-                cancelar: false,
-            },
+                cancelar: false
+            }
         };
     },
 
@@ -157,7 +153,7 @@ export default {
             let resultado = this.comprobarData();
             switch (resultado) {
                 case 1:
-                    this.guardarEscala()
+                    this.guardarEscala();
                     break;
                 case -1:
                     this.dataEscala.mensaje =
@@ -167,10 +163,13 @@ export default {
                     this.dataEscala.status = -1;
                     this.dataEscala.dialog = true;
                     break;
-            }   
+            }
         },
         comprobarData() {
-            if (parseInt(this.dataEscala.inicio) >= parseInt(this.dataEscala.final)) {
+            if (
+                parseInt(this.dataEscala.inicio) >=
+                parseInt(this.dataEscala.final)
+            ) {
                 return -1;
             }
             return 1;
@@ -185,10 +184,8 @@ export default {
             axios
                 .post("/evaluaciones/crear-escala", escala)
                 .then(response => {
-                    this.dataEscala.mensaje =
-                        "Escala creada correctamente";
-                    this.dataEscala.descripcion =
-                        "informacion guardada";
+                    this.dataEscala.mensaje = "Escala creada correctamente";
+                    this.dataEscala.descripcion = "informacion guardada";
                     this.dataEscala.dialog = true;
                     this.dataEscala.status = 1;
                 })
@@ -201,28 +198,28 @@ export default {
                     this.dataEscala.dialog = true;
                 });
         },
-        cancelarEscala(){
+        cancelarEscala() {
             this.dataEscala.cancelar = true;
             this.dataEscala.mensaje =
-                        "¿Seguro que quieres salir sin crear la escala?";
+                "¿Seguro que quieres salir sin crear la escala?";
             this.dataEscala.descripcion =
-                        "los cambios no se guardaran si te sales ahora";
+                "los cambios no se guardaran si te sales ahora";
             this.dataEscala.status = -2;
             this.dataEscala.dialog = true;
         },
-        ejecutarAccionDialog(){
-            if(this.dataEscala.cancelar == true){
+        ejecutarAccionDialog() {
+            if (this.dataEscala.cancelar == true) {
                 this.dataEscala = {
-                mensaje: "",
-                descripcion: "",
-                inicio: '',
-                final: '',
-                valid: false,
-                dialog: false,
-                status: 0,
-                cancelar: false,
-                }
-                this.$emit('regresarPantalla','menu')
+                    mensaje: "",
+                    descripcion: "",
+                    inicio: "",
+                    final: "",
+                    valid: false,
+                    dialog: false,
+                    status: 0,
+                    cancelar: false
+                };
+                this.$emit("regresarPantalla", "menu");
             }
             this.dataEscala.dialog = false;
         }

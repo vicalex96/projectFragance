@@ -17,10 +17,14 @@ Route::get('/recomendador', function () {
 Route::get('/evaluaciones', function () {
     return view('evaluacion');
 });
+
 Route::get('/evaluaciones/variables', 'evaluacionController@obtenerVariables');
 Route::post('/evaluaciones/crear-formula', 'evaluacionController@crearFormula');
 Route::post('/evaluaciones/crear-escala', 'evaluacionController@crearEscala');
 Route::post('/evaluaciones/formularios-vigentes', 'evaluacionController@obtenerFormulas');
+Route::post('/evaluaciones/crear-escala', 'evaluacionController@crearEscala');
+Route::post('/evaluacion/descartarFormula', 'evaluacionController@descartarFormulas');
+
 
 
 

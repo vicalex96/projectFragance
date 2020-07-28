@@ -1,58 +1,53 @@
 <template>
     <v-container fluid>
         <v-row justify="center">
-            <v-col class="blue lighten-2 white--text text-center display-1 pa-3" cols="8">
-                opciones de formulas y evaluaciones 
+            <v-col
+                class="blue lighten-2 white--text text-center display-1 pa-3"
+                cols="8"
+            >
+                opciones de formulas y evaluaciones
             </v-col>
         </v-row>
+
         <v-row justify="center">
             <v-col class="blue lighten-2 white--text text-right " cols="8">
-                productor: -- {{productor.nombre}} --
+                productor: -- {{ productor.nombre }} --
             </v-col>
         </v-row>
-        
+
         <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
-                  Escalas
+                Escalas
             </v-col>
-            <v-col class="blue lighten-5" cols="6" >
-                <v-btn
-                color="warning"
-                class="mr-4"
-                @click="crearEscala"
-                >
-                crear escala
-                </v-btn> 
+            <v-col class="blue lighten-5" cols="6">
+                <v-btn color="warning" class="mr-4" @click="crearEscala">
+                    crear escala
+                </v-btn>
             </v-col>
         </v-row>
+
         <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                 formulas
             </v-col>
-            <v-col class="blue lighten-4" cols="6" >
-                <v-btn
-                color="warning"
-                class="mr-4"
-                @click="crearFormula"
-                >
-                crear formula
-                </v-btn> 
+            <v-col class="blue lighten-4" cols="6">
+                <v-btn color="warning" class="mr-4" @click="crearFormula">
+                    crear formula
+                </v-btn>
             </v-col>
         </v-row>
+
         <v-row justify="center">
             <v-col class="blue darken-2 white--text text-right pa-5" cols="2">
                 evaluar
             </v-col>
-            <v-col class="blue lighten-5" cols="6" >
-                <v-btn
-                color="success"
-                class="mr-4"
-                @click="ejecutarEvaluacion"
-                >
-                ejecutar evaluacion
-                </v-btn> 
+            <v-col class="blue lighten-5" cols="6">
+                <v-btn color="success" class="mr-4" @click="ejecutarEvaluacion">
+                    ejecutar evaluacion
+                </v-btn>
             </v-col>
         </v-row>
+        
         <v-row justify="center">
             <v-col class="blue lighten-2 white--text text-center pa-3" cols="8">
             </v-col>
@@ -62,25 +57,24 @@
 
 <script>
 export default {
-    props:['productor'],
-    data(){
-        return{
-
-        }      
+    props: ['productor'],
+    data() {
+        return {
+        };
     },
-    methods:{
-        crearFormula(){
-            this.$emit('opcionElegida','formula')
+    methods: {
+        crearEscala() {
+            this.$emit("opcionElegida", "escala");
         },
-        crearEscala(){
-            this.$emit('opcionElegida','escala')
+        crearFormula() {
+            this.$emit("opcionElegida", "formula");
         },
-        ejecutarEvaluacion(){
-            this.$emit('opcionElegida','evaluacion')
-        }
+        ejecutarEvaluacion() {
+            this.$emit("opcionElegida", "evaluacion");
+        },
     },
-    updated(){
-        this.valid = true
-    },
-}
+    updated() {
+        this.valid = true;
+    }
+};
 </script>

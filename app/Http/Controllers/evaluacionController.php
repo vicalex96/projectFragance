@@ -45,18 +45,28 @@ class evaluacionController extends Controller
     }
 
     public function crearFormula(Request $request){
-        $params = json_decode($request->criterios, true);
-        return DB::transaction(function(){
-            foreach($params as $criterios => $id_variable) 
-            {
-                DB::insert("insert into 
+        $variables = $request->all();
+        DB::beginTransaction();
+        try {
+            foreach($variables as $criterio){
+                $id_var = $criterio['id_variable'];
+                $pesos = $criterio['peso'];
+                $id_prod = $criterio['id_productor'];
+                $tipo = $criterio['tipoEval'];
+                
+                $result = DB::insert("insert into 
                 vam_evaluacion_criterio(id_productor,id_variable,fecha_inicio,peso,tipopor) 
-                values('$request->id_productor',
-                '$criterio->id_variable',
+                values('$id_prod',
+                '$id_var',
                 current_date,
-                $criterio->peso,$request->tipoEval)");
+                '$pesos','$tipo')");
             }
-        });
+            DB::commit();
+            return 'ok';
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e;
+        }
     }
     public function crearEscala(Request $request){
 
@@ -70,10 +80,10 @@ class evaluacionController extends Controller
         values('$id_productor','$id_escala_v',current_date,'$r_inicio','$r_final');");
     }
 
-    public function obteneSrFormulas(Request $request){
-        $id_productor = $request;
+    public function obtenerFormulas(Request $request){
+        $id = $request->id_productor;
         return DB::select("select 
-                criterio.id_variable, SS
+                criterio.id_variable,
                 criterio.fecha_inicio, 
                 variable.nombre, 
                 criterio.peso, 
@@ -83,8 +93,16 @@ class evaluacionController extends Controller
             where criterio.id_variable = variable.id_variable 
                 and variable.id_variable = criterio.id_variable
                 and criterio.fecha_fin is null
-                and criterio.id_productor = '$id_productor'");
+                and criterio.id_productor = '$id'");
     }
 
+    public function  descartarFormulas(Request $request){
+        $id = $request->id_productor;
+        $tipo = $request->tipo;
+        return DB::update("update vam_evaluacion_criterio
+            set fecha_fin = current_date
+            where id_productor = '$id' and tipopor = '$tipo' and fecha_fin is null
+            ");
+    }
 
 }

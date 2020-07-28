@@ -9,7 +9,22 @@
                     creacion de formulas
                 </v-col>
             </v-row>
-
+            <v-row class="justify-center">
+                <v-col
+                    class="blue lighten-2 white--text text-left display-1 pa-3"
+                    cols="5"
+                >
+                    productor:--{{productor.nombre}}--
+                </v-col>
+                <v-col
+                    class="blue lighten-2 white--text text-right display-1  pa-3"
+                    cols=""
+                >
+                    <div v-if="existeFormula.value">
+                        ya existe una formula {{existeFormula.tipo}} vigente
+                    </div>
+                </v-col>
+            </v-row>
             <v-row>
                 <v-col
                     class="blue darken-2 text-right white--text pa-5"
@@ -19,12 +34,9 @@
                 </v-col>
                 <v-col class="blue lighten-5" cols="1"></v-col>
                 <v-col class="blue lighten-5" cols="9">
-                    <v-radio-group v-model="tipoEval" row>
+                    <v-radio-group v-model="tipoEval" :mandatory="false" row>
                         <v-radio label="inicial" value="inicial"></v-radio>
-                        <v-radio
-                            label="renovacion"
-                            value="renovacion"
-                        ></v-radio>
+                        <v-radio label="renovacion" value="renovacion" ></v-radio>
                     </v-radio-group>
                 </v-col>
             </v-row>
@@ -52,7 +64,7 @@
                 </v-col>
             </v-row>
 
-            <v-row v-for="criterio in criterios" :key="criterio.id">
+            <v-row v-for="criterio in filtroCriterio" :key="criterio.id" >
                 <v-col
                     class="blue darken-2 white--text text-right pa-7"
                     cols="2"
@@ -140,9 +152,9 @@
 
             <v-dialog v-model="dataFormula.dialog" max-width="400">
                 <v-card>
-                    <v-card-title class="headline">{{
-                        dataFormula.mensaje
-                    }}</v-card-title>
+                    <v-card-title class="headline">
+                        {{dataFormula.mensaje}}
+                    </v-card-title>
 
                     <v-card-text>
                         {{ dataFormula.descripcion }}
@@ -162,7 +174,7 @@
                             <v-btn
                                 class="text-right"
                                 color="red darken-1"
-                                v-if="dataFormula.cancelar == true"
+                                v-if="dataFormula.cancelar == true || dataFormula.status == 2"
                                 @click="dataFormula.dialog = false"
                                 text
                             >
@@ -190,17 +202,20 @@
 <script>
 import axios from "axios";
 export default {
-    props: ["productor", "variables"],
+    props: ["productor", "variables","formulas"],
     data() {
         return {
-            tipoEval: "inicial",
+            tipoEval: "",
             criterios: [],
             reglasDePeso: [
                 v => !!v || "el peso es requerido",
                 v => /^[0-9]{0,3}$/.test(v) || "solo numeros",
                 v =>
                     (v && parseInt(v) <= 100) ||
-                    "el peso supera el 100% o es texto"
+                    "el peso supera el 100% o es texto",
+                 v =>
+                    (v && parseInt(v) > 0) ||
+                    "no puede haber pesos en 0"
             ],
             reglasDelista: [v => !!v || "criterio es necesario"],
             pesoExito: "",
@@ -210,10 +225,27 @@ export default {
                 dialog: false,
                 valid: false,
                 status: 0,
-                cancelar: false
+                cancelar: false   
             },
-            formulasPrevias: ""
+            existeFormula:{
+                value:'',
+                tipo:'',
+            },
         };
+    },
+    watch:{
+        tipoEval: function () {
+            let id;
+            this.existeFormula.value = false
+            this.existeFormula.tipo = "NaN"
+            for(id in this.formulas){
+                if(this.tipoEval==this.formulas[id].tipopor){
+                   this.existeFormula.value = true
+                   this.existeFormula.tipo = this.formulas[id].tipopor
+                   break;
+                }
+            }
+        }
     },
     computed: {
         varaiblesFiltradas() {
@@ -243,12 +275,8 @@ export default {
                 }
             }
         },
-        revisarFormulasExistentes() {
-            axios
-                .get("/evaluaciones/formulas", this.productor)
-                .then(response => {
-                    this.variablesFormula = response.data;
-                });
+        filtroCriterio(){
+            return this.criterios;
         }
     },
     methods: {
@@ -299,7 +327,14 @@ export default {
             let resultado = this.comprobarData();
             this.dataFormula.cancelar = false;
             switch (resultado) {
+                case 2:
+                    //pedira descartar formulas anteriores
+                    this.dataFormula.mensaje = "existe una formula " + this.tipoEval + " previa,   ¿deseas descartarla?"
+                    this.dataFormula.descripcion = "no se podra volver usar esa formula"
+                    this.dataFormula.status = 2;
+                    break;
                 case 1:
+                    //la mejor de todas, se guarda sin problemas
                     this.guardarFormula();
                     break;
                 default:
@@ -358,6 +393,7 @@ export default {
                         "es necesario indicar el criterio de exito";
                     this.dataFormula.status = -7;
                     break;
+
             }
             this.dataFormula.dialog = true;
         },
@@ -392,34 +428,42 @@ export default {
             if (this.pesoExito <= 0 || this.pesoExito > 100) {
                 return -7;
             }
+            if(this.existeFormula.value == true){
+                return 2;
+            }
             return 1;
         },
         guardarFormula() {
             this.guardarCriterioExito(this.pesoExito);
-            const formula = {
-                criterios: this.criterios,
-                tipoEval: this.tipoEval,
-                id_productor: this.productor.id_productor
-            };
+            let id;
+            for(id in this.criterios){
+                this.criterios[id].tipoEval = this.tipoEval
+                this.criterios[id].id_productor = this.productor.id_productor
+            }
+            const formula = this.criterios
+            this.dataFormula.status = -1;
             axios
-                .post("/evaluaciones/crear-formula", formula)
-                .then(response => {
+                .post("/evaluaciones/crear-formula", this.criterios)
+                .then((response) => {
                     this.dataFormula.mensaje = "formula creada correctamente";
-                    this.dataEscala.descripcion = "informacion guardada";
-                    this.dataEscala.dialog = true;
-                    this.dataEscala.status = 1;
+                    this.dataFormula.descripcion = "informacion guardada";
+                    this.dataFormula.status = 1;
+                    this.dataFormula.dialog = true;        
                 })
-                .catch(error => {
-                    this.dataEscala.mensaje =
-                        "-Error: no fue posible guardar los datos";
-                    this.dataEscala.descripcion =
-                        "hubo un error al tratar de almacenar la data";
-                    this.dataEscala.status = -2;
-                    this.dataEscala.dialog = true;
-                });
+                    if(this.dataFormula.status == -1){
+                        this.dataFormula.mensaje =
+                            "-Error: no fue posible guardar los datos";
+                        this.dataFormula.descripcion =
+                            "hubo un error al tratar de almacenar la data";
+                        this.dataFormula.status = -2;
+                        this.dataFormula.dialog = true;
+                    }
+
+                
             this.dataFormula.dialog = false;
             this.$emit("regresarAtras", true);
         },
+
         cancelarFormula() {
             this.dataFormula.cancelar = true;
             this.dataFormula.mensaje =
@@ -429,6 +473,7 @@ export default {
             this.dataFormula.status = -2;
             this.dataFormula.dialog = true;
         },
+
         ejecutarAccionDialog() {
             if (this.dataFormula.cancelar == true) {
                 this.dataFormula = {
@@ -439,11 +484,42 @@ export default {
                     status: 0,
                     cancelar: false
                 }
+                this.existeFormula = {
+                    value: "",
+                    tipo: "",
+                }
+                this.tipoEval = ""
+                this.pesoExito = "";
                 this.criterios = []
                 this.$emit("regresarPantalla", "menu");
+            }else if(this.existeFormula.value == true && this.dataFormula.status == 2){
+                console.log('OJO se esta ejecutando el descartador de formulas => ejecutarAccionDialog()')
+                    this.dataFormula.dialog = false
+                    this.dataFormula.status = 0
+                let data ={
+                    id_productor: this.productor.id_productor,
+                    tipo: this.tipoEval,
+                }
+                this.dataFormula.dialog = false;
+                this.dataFormula.status = -1;
+                axios.post("/evaluacion/descartarFormula",data)
+                .then(response => {
+                    this.dataFormula.status = 1;
+                    console.log('ya se descartaron las formulas => ejecutarAccionDialog()')
+                    this.guardarFormula() 
+                })
+                if(this.dataFormula.status = -1){
+                    this.dataFormula.status = 0
+                    this.dataFormula.mensaje =
+                        "-Error: no se pudo descartar las formulas -";
+                    this.dataFormula.descripcion =
+                         "no se han podido descartar las formulas";
+                    this.dataFormula.dialog = true
+                }
+            }else{
+                this.dataFormula.dialog = false;
             }
-            this.dataFormula.dialog = false;
-        }
+        },
     }
 };
 </script>

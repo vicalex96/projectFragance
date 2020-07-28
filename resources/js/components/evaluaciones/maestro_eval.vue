@@ -1,9 +1,19 @@
 <template>
     <v-container fluid>
+        <selector-component
+            v-show="productor.length == 0"
+            :lista="lista"
+            :tipo="tipo"
+            @elementSelect="selecionarProveedor(...arguments)"
+        ></selector-component>
+
         <opciones-formula-component
             :productor="productor"
             v-show="productor.length != 0 && opcion == 'menu'"
             @opcionElegida="elegirOpcion(...arguments)"
+            @regresarPantalla="regresarPantalla(...arguments)"
+            
+            
         >
         </opciones-formula-component>
 
@@ -17,20 +27,15 @@
             v-show="opcion == 'formula'"
             :productor="productor"
             :variables="variablesFormula"
+            :formulas="formulas"
             @regresarPantalla="regresarPantalla(...arguments)"
         ></formula-component>
 
         <evaluar-proveedores
             v-show="opcion == 'evaluacion'"
             :productor="productor"
+            :formulas="formulas"
         ></evaluar-proveedores>
-
-        <selector-component
-            v-show="productor.length == 0"
-            :lista="lista"
-            :tipo="tipo"
-            @elementSelect="selecionarProveedor(...arguments)"
-        ></selector-component>
     </v-container>
 </template>
 
@@ -58,6 +63,10 @@ export default {
             this.opcion = opcion;
             if (opcion == "formula") {
                 this.obtenerVariables();
+                this.obtenerFormulas();
+            }
+            if (opcion == "evaluacion") {
+                this.obtenerFormulas();
             }
         },
         agregarComentario(comentario) {
@@ -76,21 +85,21 @@ export default {
                 this.variablesFormula = response.data;
             });
         },
-        obtenerFormulario() {
+        obtenerFormulas() {
             axios
                 .post(
                     "/evaluaciones/formularios-vigentes",
-                    this.productor.id_productor
+                    this.productor
                 )
                 .then(response => {
                     this.formulas = response.data;
-
                 });
         },
         regresarPantalla(pantalla) {
-            if (pantalla == "menu") {
-                this.opcion = pantalla;
+            if (pantalla == "seleccion") {
+                productor = "";
             }
+            this.opcion = pantalla;
         }
     }
 };
